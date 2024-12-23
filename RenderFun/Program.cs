@@ -8,7 +8,7 @@ internal static class Program
     {
         using var clay = new ClayContext(new Dimensions(800, 600));
         
-        Frame();
+        // Frame();
         Frame2();
     }
 

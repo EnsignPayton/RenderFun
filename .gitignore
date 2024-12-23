@@ -3,4 +3,3 @@ obj/
 .idea
 *.so
 *.o
-native/clay.c
