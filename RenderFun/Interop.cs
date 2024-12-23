@@ -13,9 +13,9 @@ internal static partial class Interop
 {
     private const string LibName = "clay";
     private const string Prefix = "Clay_";
-    
+
     #region Public API Surface
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(MinMemorySize))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial uint MinMemorySize();
@@ -23,7 +23,7 @@ internal static partial class Interop
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(CreateArenaWithCapacityAndMemory))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial Arena CreateArenaWithCapacityAndMemory(uint capacity, byte* offset);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(SetPointerState))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetPointerState(Vector2 position, [MarshalAs(UnmanagedType.I1)] bool pointerDown);
@@ -31,11 +31,11 @@ internal static partial class Interop
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(Initialize))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void Initialize(Arena arena, Dimensions layoutDimensions);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(UpdateScrollContainers))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void UpdateScrollContainers([MarshalAs(UnmanagedType.I1)] bool enableDragScrolling, Vector2 scrollDelta, float deltaTime);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(SetLayoutDimensions))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetLayoutDimensions(Dimensions dimensions);
@@ -47,22 +47,22 @@ internal static partial class Interop
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(EndLayout))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial Array<RenderCommand> EndLayout();
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(PointerOver))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool PointerOver(ElementId id);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(GetElementId))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial ElementId GetElementId(String id);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(GetScrollContainerData))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial ScrollContainerData GetScrollContainerData(ElementId id);
 
     public unsafe delegate Dimensions MeasureTextFunctionDelegate(String* text, TextElementConfig* config);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(SetMeasureTextFunction))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetMeasureTextFunction(MeasureTextFunctionDelegate measureTextFunction);
@@ -70,13 +70,13 @@ internal static partial class Interop
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(RenderCommandArray_Get))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial RenderCommand* RenderCommandArray_Get(Array<RenderCommand>* array, int index);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(SetDebugModeEnabled))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetDebugModeEnabled([MarshalAs(UnmanagedType.I1)] bool enabled);
-    
+
     #endregion
-    
+
     #region Private API Surface
 
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_OpenElement))]
@@ -94,63 +94,63 @@ internal static partial class Interop
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_OpenTextElement))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial void _OpenTextElement(String text, TextElementConfig* textConfig);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_AttachId))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void _AttachId(ElementId id);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_AttachLayoutConfig))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial void _AttachLayoutConfig(LayoutConfig* layoutConfig);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_AttachElementConfig))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial void _AttachElementConfig(void* config, _ElementConfigType type);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_StoreLayoutConfig))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial LayoutConfig* _StoreLayoutConfig(LayoutConfig config);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_StoreRectangleElementConfig))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial RectangleElementConfig* _StoreRectangleElementConfig(RectangleElementConfig config);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_StoreTextElementConfig))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial TextElementConfig* _StoreTextElementConfig(TextElementConfig config);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_StoreImageElementConfig))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial ImageElementConfig* _StoreImageElementConfig(ImageElementConfig config);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_StoreFloatingElementConfig))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial FloatingElementConfig* _StoreFloatingElementConfig(FloatingElementConfig config);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_StoreCustomElementConfig))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial CustomElementConfig* _StoreCustomElementConfig(CustomElementConfig config);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_StoreScrollElementConfig))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial ScrollElementConfig* _StoreScrollElementConfig(ScrollElementConfig config);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_StoreBorderElementConfig))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial BorderElementConfig* _StoreBorderElementConfig(BorderElementConfig config);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_HashString))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial ElementId _HashString(String toHash, uint index, uint seed);
-    
+
     [LibraryImport(LibName, EntryPoint = Prefix + nameof(_GetOpenLayoutElementId))]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial uint _GetOpenLayoutElementId();
-    
+
     #endregion
 
     #region Internal Data Types
-    
+
     [StructLayout(LayoutKind.Sequential)]
     public struct String
     {
@@ -160,7 +160,7 @@ internal static partial class Interop
         public readonly unsafe ReadOnlySpan<byte> AsSpan() => new(Chars, Length);
         public override string ToString() => Encoding.ASCII.GetString(AsSpan());
     }
-    
+
     [StructLayout(LayoutKind.Sequential)]
     public struct Array<T> where T : unmanaged
     {
@@ -231,6 +231,6 @@ internal static partial class Interop
         public uint Id;
         public RenderCommandType CommandType;
     }
-    
+
     #endregion
 }
