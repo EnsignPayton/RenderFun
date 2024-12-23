@@ -149,7 +149,7 @@ internal static partial class Interop
     
     #endregion
 
-    #region Data Types
+    #region Internal Data Types
     
     [StructLayout(LayoutKind.Sequential)]
     public struct String

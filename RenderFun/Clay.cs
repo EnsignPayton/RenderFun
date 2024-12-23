@@ -5,19 +5,17 @@ namespace RenderFun;
 
 public static class Clay
 {
-    public static IDisposable Initialize(Dimensions dimensions) => new ClayContext(dimensions);
+    // TODO: Expose procedural initialization?
+    public static IDisposable Initialize(Dimensions dimensions) =>
+        new ClayContext(dimensions);
     
     public static LayoutBuilder UI() => new();
 
-    public static void BeginLayout() => Interop.BeginLayout();
+    public static void BeginLayout() =>
+        Interop.BeginLayout();
 
-    public static unsafe ReadOnlySpan<RenderCommand> EndLayout()
-    {
-        var renderCommands = Interop.EndLayout();
-        return new Span<RenderCommand>(
-            renderCommands.InternalArray,
-            (int)renderCommands.Length);
-    }
+    public static ReadOnlySpan<RenderCommand> EndLayout() =>
+        RenderCommand.FromInternal(Interop.EndLayout());
 
     public static SizingAxis SizingFixed(float min, float max = 0) => new()
     {
@@ -31,7 +29,7 @@ public static class Clay
     };
 }
 
-// Public API Types
+#region Interop-Compatible Public Types
 
 public readonly record struct Dimensions(
     float Width,
@@ -52,8 +50,6 @@ public readonly record struct BoundingBox(
     float Y,
     float Width,
     float Height);
-
-// ElementId
 
 public readonly record struct CornerRadius(
     float TopLeft,
@@ -215,9 +211,18 @@ public enum RenderCommandType
     Custom,
 }
 
+#endregion
+
+#region Wrapper Types
+
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct RenderCommand
 {
+    internal static unsafe ReadOnlySpan<RenderCommand> FromInternal(
+        Interop.Array<Interop.RenderCommand> renderCommands) => new(
+        renderCommands.InternalArray,
+        (int)renderCommands.Length);
+
     // Magically works with Span ctor because 0 offset and same size
     // Do not add fields to this or things will get bad!
     internal readonly Interop.RenderCommand NativeCommand;
@@ -316,3 +321,5 @@ public readonly struct RenderCommand
 
     // TODO: GetHashCode, Equals, IEquatable
 }
+
+#endregion
