@@ -79,8 +79,8 @@ internal static class Program
                     })
                     .WithChildren(() =>
                     {
-                        RenderHeaderButton("File"u8);
-                        RenderHeaderButton("Edit"u8);
+                        RenderHeaderButton("File");
+                        RenderHeaderButton("Edit");
 
                         Clay.UI()
                             .WithLayout(new LayoutConfig
@@ -89,9 +89,9 @@ internal static class Program
                             })
                             .Build();
 
-                        RenderHeaderButton("Upload"u8);
-                        RenderHeaderButton("Media"u8);
-                        RenderHeaderButton("Support"u8);
+                        RenderHeaderButton("Upload");
+                        RenderHeaderButton("Media");
+                        RenderHeaderButton("Support");
                     })
                     .Build();
 
@@ -133,9 +133,8 @@ internal static class Program
             .Build();
     }
 
-    private static void RenderHeaderButton(ReadOnlySpan<byte> text)
+    private static void RenderHeaderButton(string text)
     {
-        var mem = new ReadOnlyMemory<byte>(text.ToArray());
         Clay.UI()
             .WithLayout(new LayoutConfig { Padding = new Padding(16, 8) })
             .WithRectangle(new RectangleElementConfig
@@ -145,7 +144,7 @@ internal static class Program
             })
             .WithChildren(() =>
             {
-                Clay.Text(mem)
+                Clay.Text(text)
                     .WithConfig(new TextElementConfig
                     {
                         FontId = FontIdBody16,

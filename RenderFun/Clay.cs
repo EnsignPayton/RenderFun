@@ -13,6 +13,7 @@ public static class Clay
 
     public static TextBuilder Text(ReadOnlySpan<byte> text) => new(text);
     public static TextBuilder2 Text(ReadOnlyMemory<byte> text) => new(text);
+    public static TextBuilder2 Text(string text) => new(StringCache.Default.GetOrAdd(text));
 
     public static void BeginLayout() =>
         Interop.BeginLayout();
@@ -23,13 +24,29 @@ public static class Clay
     public static SizingAxis SizingFixed(float min, float max = 0) => new()
     {
         Type = SizingType.Fixed,
-        SizeMinMax = new() { Min = min, Max = max }
+        SizeMinMax = new SizingMinMax(min, max)
     };
 
     public static SizingAxis SizingGrow() => new()
     {
         Type = SizingType.Grow
     };
+}
+
+internal class StringCache
+{
+    public static StringCache Default { get; } = new();
+
+    private readonly Dictionary<string, ReadOnlyMemory<byte>> _cache = [];
+
+    public ReadOnlyMemory<byte> GetOrAdd(string value)
+    {
+        if (_cache.TryGetValue(value, out var result)) return result;
+
+        ReadOnlyMemory<byte> bytes = Encoding.ASCII.GetBytes(value);
+        _cache[value] = bytes;
+        return bytes;
+    }
 }
 
 #region Interop-Compatible Public Types
