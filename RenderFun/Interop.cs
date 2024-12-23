@@ -159,6 +159,18 @@ internal static partial class Interop
 
         public readonly unsafe ReadOnlySpan<byte> AsSpan() => new(Chars, Length);
         public override string ToString() => Encoding.ASCII.GetString(AsSpan());
+
+        public static unsafe String FromSpan(ReadOnlySpan<byte> value)
+        {
+            fixed (byte* ptr = value)
+            {
+                return new String
+                {
+                    Length = value.Length,
+                    Chars = ptr,
+                };
+            }
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]

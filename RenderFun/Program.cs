@@ -8,11 +8,17 @@ internal static class Program
     {
         using (Clay.Initialize(new Dimensions(800, 600)))
         {
-            Frame();
+            Clay.BeginLayout();
+
+            Layout();
+
+            var renderCommands = Clay.EndLayout();
+            Log(renderCommands);
+            Assert(renderCommands);
         }
     }
 
-    private static void Frame()
+    private static void Layout()
     {
         var bgColor = new Color { R = 90, G = 90, B = 90, A = 255 };
         var contentBgColor = new Color { R = 43, G = 41, B = 51, A = 255 };
@@ -29,10 +35,8 @@ internal static class Program
             CornerRadius = new CornerRadius(8)
         };
 
-        Clay.BeginLayout();
-
         Clay.UI()
-            .WithId("OuterContainer")
+            .WithId("OuterContainer"u8)
             .WithRectangle(new RectangleElementConfig { Color = bgColor })
             .WithLayout(new LayoutConfig
             {
@@ -44,7 +48,7 @@ internal static class Program
             .WithChildren(() =>
             {
                 Clay.UI()
-                    .WithId("HeaderBar")
+                    .WithId("HeaderBar"u8)
                     .WithRectangle(contentBackgroundConfig)
                     .WithLayout(new LayoutConfig
                     {
@@ -57,7 +61,7 @@ internal static class Program
                     .Build();
 
                 Clay.UI()
-                    .WithId("LowerContent")
+                    .WithId("LowerContent"u8)
                     .WithLayout(new LayoutConfig
                     {
                         Sizing = layoutExpand,
@@ -66,7 +70,7 @@ internal static class Program
                     .WithChildren(() =>
                     {
                         Clay.UI()
-                            .WithId("Sidebar")
+                            .WithId("Sidebar"u8)
                             .WithRectangle(contentBackgroundConfig)
                             .WithLayout(new LayoutConfig
                             {
@@ -79,7 +83,7 @@ internal static class Program
                             .Build();
 
                         Clay.UI()
-                            .WithId("MainContant")
+                            .WithId("MainContent"u8)
                             .WithRectangle(contentBackgroundConfig)
                             .WithLayout(new LayoutConfig { Sizing = layoutExpand })
                             .Build();
@@ -87,16 +91,12 @@ internal static class Program
                     .Build();
             })
             .Build();
-
-        var renderCommands = Clay.EndLayout();
-        Log(renderCommands);
-        Assert(renderCommands);
     }
-    
+
     private static void Log(ReadOnlySpan<RenderCommand> renderCommands)
     {
         Console.WriteLine("Command Count: " + renderCommands.Length);
-        
+
         for (int i = 0; i < renderCommands.Length; i++)
         {
             var c = renderCommands[i];
@@ -115,21 +115,21 @@ internal static class Program
         Debug.Assert(c0.BoundingBox.Width == 800);
         Debug.Assert(c0.BoundingBox.Height == 600);
         Debug.Assert(c0.CommandType == RenderCommandType.Rectangle);
-        
+
         var c1 = renderCommands[1];
         Debug.Assert(c1.BoundingBox.X == 16);
         Debug.Assert(c1.BoundingBox.Y == 16);
         Debug.Assert(c1.BoundingBox.Width == 768);
         Debug.Assert(c1.BoundingBox.Height == 60);
         Debug.Assert(c1.CommandType == RenderCommandType.Rectangle);
-        
+
         var c2 = renderCommands[2];
         Debug.Assert(c2.BoundingBox.X == 16);
         Debug.Assert(c2.BoundingBox.Y == 84);
         Debug.Assert(c2.BoundingBox.Width == 250);
         Debug.Assert(c2.BoundingBox.Height == 500);
         Debug.Assert(c2.CommandType == RenderCommandType.Rectangle);
-        
+
         var c3 = renderCommands[3];
         Debug.Assert(c3.BoundingBox.X == 274);
         Debug.Assert(c3.BoundingBox.Y == 84);
