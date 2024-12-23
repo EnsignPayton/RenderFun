@@ -171,6 +171,16 @@ internal static partial class Interop
                 };
             }
         }
+
+        public static unsafe String FromMemory(ReadOnlyMemory<byte> value)
+        {
+            using var pin = value.Pin();
+            return new String
+            {
+                Length = value.Length,
+                Chars = pin.Pointer,
+            };
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]

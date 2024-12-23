@@ -8,8 +8,10 @@ public static class Clay
     // TODO: Expose procedural initialization?
     public static IDisposable Initialize(Dimensions dimensions) =>
         new ClayContext(dimensions);
-    
+
     public static LayoutBuilder UI() => new();
+    public static TextBuilder Text(ReadOnlySpan<byte> text) => new(text);
+    public static TextBuilder2 Text(ReadOnlyMemory<byte> text) => new(text);
 
     public static void BeginLayout() =>
         Interop.BeginLayout();
@@ -142,7 +144,7 @@ public readonly record struct TextElementConfig(
     ushort LetterSpacing,
     ushort LineHeight,
     TextElementConfigWrapMode WrapMode);
-    
+
 public readonly record struct ImageElementConfig(
     IntPtr ImageData,
     Dimensions SourceDimensions);
@@ -230,7 +232,7 @@ public readonly struct RenderCommand
     public BoundingBox BoundingBox => NativeCommand.BoundingBox;
     public uint Id => NativeCommand.Id;
     public RenderCommandType CommandType => NativeCommand.CommandType;
-    
+
     public unsafe ref RectangleElementConfig GetRectangleConfig() =>
         ref *NativeCommand.Config.RectangleElementConfig;
 
@@ -272,7 +274,7 @@ public readonly struct RenderCommand
         builder.Append(Id);
         builder.Append(", CommandType = ");
         builder.Append(CommandType);
-        
+
         if (NativeCommand.Text.Length > 0)
         {
             builder.Append(", Text = ");
@@ -280,7 +282,7 @@ public readonly struct RenderCommand
             builder.Append(NativeCommand.Text.ToString());
             builder.Append('"');
         }
-        
+
         switch (CommandType)
         {
             case RenderCommandType.Rectangle:
@@ -315,7 +317,7 @@ public readonly struct RenderCommand
                 break;
             // TODO: ScissorStart, ScissorEnd?
         }
-        
+
         return true;
     }
 

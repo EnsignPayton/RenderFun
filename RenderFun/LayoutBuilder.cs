@@ -6,6 +6,7 @@ public ref struct LayoutBuilder
 {
     private ref LayoutConfig _layoutConfig;
     private ref RectangleElementConfig _rectConfig;
+
     private Action? _childBuilder;
 
     public LayoutBuilder WithId(ReadOnlySpan<byte> value)
@@ -18,15 +19,13 @@ public ref struct LayoutBuilder
 
     public unsafe LayoutBuilder WithLayout(LayoutConfig config)
     {
-        var handle = Interop._StoreLayoutConfig(config);
-        _layoutConfig = ref *handle;
+        _layoutConfig = ref *Interop._StoreLayoutConfig(config);
         return this;
     }
 
     public unsafe LayoutBuilder WithRectangle(RectangleElementConfig config)
     {
-        var handle = Interop._StoreRectangleElementConfig(config);
-        _rectConfig = ref *handle;
+        _rectConfig = ref *Interop._StoreRectangleElementConfig(config);
         return this;
     }
 
