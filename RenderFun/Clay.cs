@@ -10,6 +10,7 @@ public static class Clay
         new ClayContext(dimensions);
 
     public static LayoutBuilder UI() => new();
+
     public static TextBuilder Text(ReadOnlySpan<byte> text) => new(text);
     public static TextBuilder2 Text(ReadOnlyMemory<byte> text) => new(text);
 

@@ -3,3 +3,4 @@ obj/
 .idea
 *.so
 *.o
+*.user
