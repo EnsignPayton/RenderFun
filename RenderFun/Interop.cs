@@ -153,34 +153,34 @@ internal static partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct String
     {
-        public int length;
-        public unsafe void* chars;
+        public int Length;
+        public unsafe void* Chars;
     }
     
     [StructLayout(LayoutKind.Sequential)]
     public struct Array<T> where T : unmanaged
     {
-        public uint capacity;
-        public uint length;
-        public unsafe T* internalArray;
+        public uint Capacity;
+        public uint Length;
+        public unsafe T* InternalArray;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct Arena
     {
-        public String label;
-        public ulong nextAllocation;
-        public ulong capacity;
-        public unsafe void* memory;
+        public String Label;
+        public ulong NextAllocation;
+        public ulong Capacity;
+        public unsafe void* Memory;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct ElementId
     {
-        public uint id;
-        public uint offset;
-        public uint baseId;
-        public String stringId;
+        public uint Id;
+        public uint Offset;
+        public uint BaseId;
+        public String StringId;
     }
 
     [Flags]
@@ -195,187 +195,27 @@ internal static partial class Interop
         Custom = 64,
     }
 
-    public enum LayoutDirection : byte
-    {
-        LeftToRight,
-        TopToBottom,
-    }
-
-    public enum LayoutAlignmentX : byte
-    {
-        Left,
-        Right,
-        Center,
-    }
-
-    public enum LayoutAlignmentY : byte
-    {
-        Top,
-        Bottom,
-        Center,
-    }
-
-    public enum SizingType : byte
-    {
-        Fit,
-        Grow,
-        Percent,
-        Fixed,
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct ChildAlignment
-    {
-        public LayoutAlignmentX x;
-        public LayoutAlignmentY y;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct SizingMinMax
-    {
-        public float min;
-        public float max;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public struct SizingAxis
-    {
-        [FieldOffset(0)] public SizingMinMax sizeMinMax;
-        [FieldOffset(0)] public float sizePercent;
-        [FieldOffset(8)] public SizingType type;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct Sizing
-    {
-        public SizingAxis width;
-        public SizingAxis height;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct Padding
-    {
-        public ushort x;
-        public ushort y;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct LayoutConfig
-    {
-        public Sizing sizing;
-        public Padding padding;
-        public ushort childGap;
-        public ChildAlignment childAlignment;
-        public LayoutDirection layoutDirection;
-    }
-
-    public enum TextElementConfigWrapMode
-    {
-        Words,
-        Newlines,
-        None,
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct TextElementConfig
-    {
-        public Color textColor;
-        public ushort fontId;
-        public ushort fontSize;
-        public ushort letterSpacing;
-        public ushort lineHeight;
-        public TextElementConfigWrapMode wrapMode;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct ImageElementConfig
-    {
-        public unsafe void* imageData;
-        public Dimensions sourceDimensions;
-    }
-
-    public enum FloatingAttachPointType : byte
-    {
-        LeftTop,
-        LeftCenter,
-        LeftBottom,
-        CenterTop,
-        CenterCenter,
-        CenterBottom,
-        RightTop,
-        RightCenter,
-        RightBottom,
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct FloatingAttachPoints
-    {
-        public FloatingAttachPointType element;
-        public FloatingAttachPointType parent;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct FloatingElementConfig
-    {
-        public Vector2 offset;
-        public Dimensions expand;
-        public ushort zIndex;
-        public uint parentId;
-        public FloatingAttachPoints attachment;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct CustomElementConfig
-    {
-        public unsafe void* customData;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct ScrollElementConfig
-    {
-        public bool horizontal;
-        public bool vertical;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct Border
-    {
-        public uint width;
-        public Color color;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct BorderElementConfig
-    {
-        public Border left;
-        public Border right;
-        public Border top;
-        public Border bottom;
-        public Border betweenChildren;
-        public CornerRadius cornerRadius;
-    }
-
     [StructLayout(LayoutKind.Explicit)]
     public struct ElementConfigUnion
     {
-        [FieldOffset(0)] public unsafe RectangleElementConfig* rectangleElementConfig;
-        [FieldOffset(0)] public unsafe TextElementConfig* textElementConfig;
-        [FieldOffset(0)] public unsafe ImageElementConfig* imageElementConfig;
-        [FieldOffset(0)] public unsafe FloatingElementConfig* floatingElementConfig;
-        [FieldOffset(0)] public unsafe CustomElementConfig* customElementConfig;
-        [FieldOffset(0)] public unsafe ScrollElementConfig* scrollElementConfig;
-        [FieldOffset(0)] public unsafe BorderElementConfig* borderElementConfig;
+        [FieldOffset(0)] public unsafe RectangleElementConfig* RectangleElementConfig;
+        [FieldOffset(0)] public unsafe TextElementConfig* TextElementConfig;
+        [FieldOffset(0)] public unsafe ImageElementConfig* ImageElementConfig;
+        [FieldOffset(0)] public unsafe FloatingElementConfig* FloatingElementConfig;
+        [FieldOffset(0)] public unsafe CustomElementConfig* CustomElementConfig;
+        [FieldOffset(0)] public unsafe ScrollElementConfig* ScrollElementConfig;
+        [FieldOffset(0)] public unsafe BorderElementConfig* BorderElementConfig;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct ScrollContainerData
     {
-        public unsafe Vector2* scrollPosition;
-        public Dimensions scrollContainerDimensions;
-        public Dimensions contentDimensions;
-        public ScrollElementConfig config;
+        public unsafe Vector2* ScrollPosition;
+        public Dimensions ScrollContainerDimensions;
+        public Dimensions ContentDimensions;
+        public ScrollElementConfig Config;
         [MarshalAs(UnmanagedType.I1)]
-        public bool found;
+        public bool Found;
     }
 
     public enum RenderCommandType
@@ -393,11 +233,11 @@ internal static partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct RenderCommand
     {
-        public BoundingBox boundingBox;
-        public ElementConfigUnion config;
-        public String text;
-        public uint id;
-        public RenderCommandType commandType;
+        public BoundingBox BoundingBox;
+        public ElementConfigUnion Config;
+        public String Text;
+        public uint Id;
+        public RenderCommandType CommandType;
     }
 
     // TODO: Not part of clay.h, remove probably
@@ -419,9 +259,9 @@ internal static partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct TypedConfig
     {
-        public TypedConfigType type;
-        public unsafe void* config;
-        public ElementId id;
+        public TypedConfigType Type;
+        public unsafe void* Config;
+        public ElementId Id;
     }
     
     #endregion

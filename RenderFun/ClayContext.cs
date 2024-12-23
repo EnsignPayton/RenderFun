@@ -40,12 +40,12 @@ public sealed class ClayContext : IDisposable
         Debug.WriteLine($"Allocating {clayRequiredMemory} Bytes");
         var clayMemory = new Interop.Arena
         {
-            memory = NativeMemory.Alloc(clayRequiredMemory),
-            capacity = clayRequiredMemory,
+            Memory = NativeMemory.Alloc(clayRequiredMemory),
+            Capacity = clayRequiredMemory,
         };
 
         Interop.Initialize(clayMemory, dimensions);
         
-        return (IntPtr)clayMemory.memory;
+        return (IntPtr)clayMemory.Memory;
     }
 }

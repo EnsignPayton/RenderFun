@@ -14,12 +14,12 @@ internal static class Program
 
     private static unsafe void Frame()
     {
-        Interop.Sizing layoutExpand = new()
+        Sizing layoutExpand = new()
         {
             // CLAY_SIZING_GROW
-            width = new() { type = Interop.SizingType.Grow },
+            Width = new() { Type = SizingType.Grow },
             // CLAY_SIZING_GROW
-            height = new() { type = Interop.SizingType.Grow },
+            Height = new() { Type = SizingType.Grow },
         };
 
         RectangleElementConfig contentBackgroundConfig = new()
@@ -41,10 +41,10 @@ internal static class Program
             // CLAY_LAYOUT
             var layoutConfig = Interop._StoreLayoutConfig(new()
             {
-                layoutDirection = Interop.LayoutDirection.TopToBottom,
-                sizing = layoutExpand,
-                padding = { x = 16, y = 16 },
-                childGap = 8,
+                LayoutDirection = LayoutDirection.TopToBottom,
+                Sizing = layoutExpand,
+                Padding = new() { X = 16, Y = 16 },
+                ChildGap = 8,
             });
             
             Interop._OpenElement();
@@ -59,12 +59,12 @@ internal static class Program
                 var headerRectangleConfig = Interop._StoreRectangleElementConfig(contentBackgroundConfig);
                 var headerLayoutConfig = Interop._StoreLayoutConfig(new()
                 {
-                    sizing = new()
+                    Sizing = new()
                     {
                         // CLAY_SIZING_FIXED(60)
-                        height = new() { type = Interop.SizingType.Fixed, sizeMinMax = { min = 60 } },
+                        Height = new() { Type = SizingType.Fixed, SizeMinMax = new() { Min = 60 } },
                         // CLAY_SIZING_GROW
-                        width = new() { type = Interop.SizingType.Grow }
+                        Width = new() { Type = SizingType.Grow }
                     },
                 });
                 
@@ -82,8 +82,8 @@ internal static class Program
                 // TODO: CLAY_ID
                 var lowerLayoutConfig = Interop._StoreLayoutConfig(new()
                 {
-                    sizing = layoutExpand,
-                    childGap = 8,
+                    Sizing = layoutExpand,
+                    ChildGap = 8,
                 });
                 
                 Interop._OpenElement();
@@ -97,12 +97,12 @@ internal static class Program
                     // TODO: CLAY_ID
                     var sidebarLayoutConfig = Interop._StoreLayoutConfig(new()
                     {
-                        sizing = new()
+                        Sizing = new()
                         {
                             // CLAY_SIZING_FIXED(250)
-                            width = new() { type = Interop.SizingType.Fixed, sizeMinMax = { min = 250 } },
+                            Width = new() { Type = SizingType.Fixed, SizeMinMax = new() { Min = 250 } },
                             // CLAY_SIZING_GROW
-                            height = new() { type = Interop.SizingType.Grow }
+                            Height = new() { Type = SizingType.Grow }
                         }
                     });
                     var sidebarRectangleConfig = Interop._StoreRectangleElementConfig(contentBackgroundConfig);
@@ -120,7 +120,7 @@ internal static class Program
                     // TODO: CLAY_ID
                     var mainLayoutConfig = Interop._StoreLayoutConfig(new()
                     {
-                        sizing = layoutExpand,
+                        Sizing = layoutExpand,
                     });
                     var mainRectangleConfig = Interop._StoreRectangleElementConfig(contentBackgroundConfig);
                     Interop._OpenElement();
@@ -144,40 +144,43 @@ internal static class Program
 
     private static unsafe void Frame2()
     {
-        Interop.Sizing layoutExpand = new()
+        var bgColor = new Color { R = 90, G = 90, B = 90, A = 255 };
+        var contentBgColor = new Color { R = 43, G = 41, B = 51, A = 255 };
+        
+        var layoutExpand = new Sizing
         {
-            width = Clay.SizingGrow(),
-            height = Clay.SizingGrow()
+            Width = Clay.SizingGrow(),
+            Height = Clay.SizingGrow()
         };
 
-        RectangleElementConfig contentBackgroundConfig = new()
+        var contentBackgroundConfig = new RectangleElementConfig
         {
-            Color = new() { R = 90, G = 90, B = 90, A = 255 },
-            CornerRadius = new() { TopLeft = 8, TopRight = 8, BottomLeft = 8, BottomRight = 8 }
+            Color = contentBgColor,
+            CornerRadius = new CornerRadius(8)
         };
 
         Interop.BeginLayout();
 
         using (Clay.UI(
                    Clay.Id("OuterContainer"),
-                   Clay.Rectangle(new() { Color = new() { R = 43, G = 41, B = 51, A = 255 } }),
-                   Clay.Layout(new()
+                   Clay.Rectangle(new RectangleElementConfig { Color = bgColor }),
+                   Clay.Layout(new LayoutConfig
                    {
-                       layoutDirection = Interop.LayoutDirection.TopToBottom,
-                       sizing = layoutExpand,
-                       padding = { x = 16, y = 16 },
-                       childGap = 8,
+                       LayoutDirection = LayoutDirection.TopToBottom,
+                       Sizing = layoutExpand,
+                       Padding = new Padding(16),
+                       ChildGap = 8,
                    })))
         {
             using (Clay.UI(
                        Clay.Id("HeaderBar"),
                        Clay.Rectangle(contentBackgroundConfig),
-                       Clay.Layout(new()
+                       Clay.Layout(new LayoutConfig
                        {
-                           sizing = new()
+                           Sizing = new Sizing
                            {
-                               height = Clay.SizingFixed(60),
-                               width = Clay.SizingGrow(),
+                               Height = Clay.SizingFixed(60),
+                               Width = Clay.SizingGrow(),
                            },
                        })))
             {
@@ -185,20 +188,20 @@ internal static class Program
 
             using (Clay.UI(
                        Clay.Id("LowerContent"),
-                       Clay.Layout(new()
+                       Clay.Layout(new LayoutConfig
                        {
-                           sizing = layoutExpand,
-                           childGap = 8,
+                           Sizing = layoutExpand,
+                           ChildGap = 8,
                        })))
             {
                 using (Clay.UI(
                            Clay.Id("Sidebar"),
-                           Clay.Layout(new()
+                           Clay.Layout(new LayoutConfig
                            {
-                               sizing = new()
+                               Sizing = new Sizing
                                {
-                                   width = Clay.SizingFixed(250),
-                                   height = Clay.SizingGrow(),
+                                   Width = Clay.SizingFixed(250),
+                                   Height = Clay.SizingGrow(),
                                }
                            }),
                            Clay.Rectangle(contentBackgroundConfig)))
@@ -207,7 +210,7 @@ internal static class Program
 
                 using (Clay.UI(
                            Clay.Id("MainContent"),
-                           Clay.Layout(new() { sizing = layoutExpand }),
+                           Clay.Layout(new LayoutConfig { Sizing = layoutExpand }),
                            Clay.Rectangle(contentBackgroundConfig)))
                 {
                 }
@@ -232,55 +235,55 @@ internal static class Program
 
     private static unsafe void Log(Interop.Array<Interop.RenderCommand>* renderCommands)
     {
-        Console.WriteLine("Render Command Count: " + renderCommands->length);
+        Console.WriteLine("Render Command Count: " + renderCommands->Length);
         
-        for (int i = 0; i < renderCommands->length; i++)
+        for (int i = 0; i < renderCommands->Length; i++)
         {
             var pCommand = Interop.RenderCommandArray_Get(renderCommands, i);
             
             Console.WriteLine("Render Command " + i);
             Console.WriteLine("boundingBox");
-            Console.WriteLine("\tx: " + pCommand->boundingBox.X);
-            Console.WriteLine("\ty: " + pCommand->boundingBox.Y);
-            Console.WriteLine("\twidth: " + pCommand->boundingBox.Width);
-            Console.WriteLine("\theight: " + pCommand->boundingBox.Height);
+            Console.WriteLine("\tx: " + pCommand->BoundingBox.X);
+            Console.WriteLine("\ty: " + pCommand->BoundingBox.Y);
+            Console.WriteLine("\twidth: " + pCommand->BoundingBox.Width);
+            Console.WriteLine("\theight: " + pCommand->BoundingBox.Height);
             Console.WriteLine("config");
             Console.WriteLine("text");
-            Console.WriteLine("id: " + pCommand->id);
-            Console.WriteLine("commandType: " + pCommand->commandType);
+            Console.WriteLine("id: " + pCommand->Id);
+            Console.WriteLine("commandType: " + pCommand->CommandType);
         }
     }
 
     private static unsafe void Assert(Interop.Array<Interop.RenderCommand>* renderCommands)
     {
-        Debug.Assert(renderCommands->length == 4);
+        Debug.Assert(renderCommands->Length == 4);
 
         var c0 = Interop.RenderCommandArray_Get(renderCommands, 0);
-        Debug.Assert(c0->boundingBox.X == 0);
-        Debug.Assert(c0->boundingBox.Y == 0);
-        Debug.Assert(c0->boundingBox.Width == 800);
-        Debug.Assert(c0->boundingBox.Height == 600);
-        Debug.Assert(c0->commandType == Interop.RenderCommandType.Rectangle);
+        Debug.Assert(c0->BoundingBox.X == 0);
+        Debug.Assert(c0->BoundingBox.Y == 0);
+        Debug.Assert(c0->BoundingBox.Width == 800);
+        Debug.Assert(c0->BoundingBox.Height == 600);
+        Debug.Assert(c0->CommandType == Interop.RenderCommandType.Rectangle);
         
         var c1 = Interop.RenderCommandArray_Get(renderCommands, 1);
-        Debug.Assert(c1->boundingBox.X == 16);
-        Debug.Assert(c1->boundingBox.Y == 16);
-        Debug.Assert(c1->boundingBox.Width == 768);
-        Debug.Assert(c1->boundingBox.Height == 60);
-        Debug.Assert(c1->commandType == Interop.RenderCommandType.Rectangle);
+        Debug.Assert(c1->BoundingBox.X == 16);
+        Debug.Assert(c1->BoundingBox.Y == 16);
+        Debug.Assert(c1->BoundingBox.Width == 768);
+        Debug.Assert(c1->BoundingBox.Height == 60);
+        Debug.Assert(c1->CommandType == Interop.RenderCommandType.Rectangle);
         
         var c2 = Interop.RenderCommandArray_Get(renderCommands, 2);
-        Debug.Assert(c2->boundingBox.X == 16);
-        Debug.Assert(c2->boundingBox.Y == 84);
-        Debug.Assert(c2->boundingBox.Width == 250);
-        Debug.Assert(c2->boundingBox.Height == 500);
-        Debug.Assert(c2->commandType == Interop.RenderCommandType.Rectangle);
+        Debug.Assert(c2->BoundingBox.X == 16);
+        Debug.Assert(c2->BoundingBox.Y == 84);
+        Debug.Assert(c2->BoundingBox.Width == 250);
+        Debug.Assert(c2->BoundingBox.Height == 500);
+        Debug.Assert(c2->CommandType == Interop.RenderCommandType.Rectangle);
         
         var c3 = Interop.RenderCommandArray_Get(renderCommands, 3);
-        Debug.Assert(c3->boundingBox.X == 274);
-        Debug.Assert(c3->boundingBox.Y == 84);
-        Debug.Assert(c3->boundingBox.Width == 510);
-        Debug.Assert(c3->boundingBox.Height == 500);
-        Debug.Assert(c3->commandType == Interop.RenderCommandType.Rectangle);
+        Debug.Assert(c3->BoundingBox.X == 274);
+        Debug.Assert(c3->BoundingBox.Y == 84);
+        Debug.Assert(c3->BoundingBox.Width == 510);
+        Debug.Assert(c3->BoundingBox.Height == 500);
+        Debug.Assert(c3->CommandType == Interop.RenderCommandType.Rectangle);
     }
 }
