@@ -52,7 +52,7 @@ internal static class Program
         };
 
         Clay.UI()
-            .WithId("OuterContainer"u8)
+            .WithId("OuterContainer")
             .WithRectangle(new RectangleElementConfig { Color = bgColor })
             .WithLayout(new LayoutConfig
             {
@@ -64,7 +64,7 @@ internal static class Program
             .WithChildren(() =>
             {
                 Clay.UI()
-                    .WithId("HeaderBar"u8)
+                    .WithId("HeaderBar")
                     .WithRectangle(contentBackgroundConfig)
                     .WithLayout(new LayoutConfig
                     {
@@ -96,7 +96,7 @@ internal static class Program
                     .Build();
 
                 Clay.UI()
-                    .WithId("LowerContent"u8)
+                    .WithId("LowerContent")
                     .WithLayout(new LayoutConfig
                     {
                         Sizing = layoutExpand,
@@ -105,7 +105,7 @@ internal static class Program
                     .WithChildren(() =>
                     {
                         Clay.UI()
-                            .WithId("Sidebar"u8)
+                            .WithId("Sidebar")
                             .WithRectangle(contentBackgroundConfig)
                             .WithLayout(new LayoutConfig
                             {
@@ -123,7 +123,7 @@ internal static class Program
                             .Build();
 
                         Clay.UI()
-                            .WithId("MainContent"u8)
+                            .WithId("MainContent")
                             .WithRectangle(contentBackgroundConfig with { Color = new Color(1, 2, 3, 255) })
                             .WithLayout(new LayoutConfig { Sizing = layoutExpand })
                             .Build();

@@ -17,6 +17,15 @@ public ref struct LayoutBuilder
         return this;
     }
 
+    public LayoutBuilder WithId(string value)
+    {
+        var memory = StringCache.Default.GetOrAdd(value);
+        var clayString = Interop.String.FromMemory(memory);
+        var elementId = Interop._HashString(clayString, 0, 0);
+        Interop._AttachId(elementId);
+        return this;
+    }
+
     public unsafe LayoutBuilder WithLayout(LayoutConfig config)
     {
         _layoutConfig = ref *Interop._StoreLayoutConfig(config);
