@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace RenderFun;
 
-public sealed class ClayContext : IDisposable
+internal sealed class ClayContext : IDisposable
 {
     private readonly IntPtr _pArena;
     private bool _disposed;

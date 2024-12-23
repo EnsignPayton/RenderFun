@@ -4,9 +4,21 @@ namespace RenderFun;
 
 public static class Clay
 {
-    // TODO: Alloc arena, init, free? Currently handled by the one-off ClayContext
+    public static IDisposable Initialize(Dimensions dimensions) => new ClayContext(dimensions);
+    
+    public static LayoutBuilder UI() => new();
 
-    public  static SizingAxis SizingFixed(float min, float max = 0) => new()
+    public static void BeginLayout() => Interop.BeginLayout();
+
+    public static unsafe ReadOnlySpan<RenderCommand> EndLayout()
+    {
+        var renderCommands = Interop.EndLayout();
+        return new Span<RenderCommand>(
+            renderCommands.InternalArray,
+            (int)renderCommands.Length);
+    }
+
+    public static SizingAxis SizingFixed(float min, float max = 0) => new()
     {
         Type = SizingType.Fixed,
         SizeMinMax = new() { Min = min, Max = max }
@@ -16,52 +28,6 @@ public static class Clay
     {
         Type = SizingType.Grow
     };
-
-    #region Odin-like low-level wrapper
-
-    internal static unsafe LayoutContext UI(params Interop.TypedConfig[] configs)
-    {
-        Interop._OpenElement();
-
-        foreach (var config in configs)
-        {
-            switch (config.Type)
-            {
-                case Interop.TypedConfigType.Id:
-                    Interop._AttachId(config.Id);
-                    break;
-                case Interop.TypedConfigType.Layout:
-                    Interop._AttachLayoutConfig((LayoutConfig*)config.Config);
-                    break;
-                default:
-                    Interop._AttachElementConfig(config.Config, (Interop._ElementConfigType)config.Type);
-                    break;
-            }
-        }
-
-        Interop._ElementPostConfiguration();
-        return new LayoutContext();
-    }
-
-    internal static unsafe Interop.TypedConfig Layout(LayoutConfig config) => new()
-    {
-        Type = Interop.TypedConfigType.Layout,
-        Config = Interop._StoreLayoutConfig(config)
-    };
-
-    internal static unsafe Interop.TypedConfig Rectangle(RectangleElementConfig config) => new()
-    {
-        Type = Interop.TypedConfigType.Rectangle,
-        Config = Interop._StoreRectangleElementConfig(config)
-    };
-
-    internal static Interop.TypedConfig Id(string label, uint index = 0) => new()
-    {
-        Type = Interop.TypedConfigType.Id,
-        Id = Interop._HashString(default, index, 0)
-    };
-
-    #endregion
 }
 
 // Public API Types
@@ -233,3 +199,50 @@ public readonly record struct BorderElementConfig(
     Border Bottom,
     Border BetweenChildren,
     CornerRadius CornerRadius);
+
+// RenderCommands
+
+public enum RenderCommandType
+{
+    None,
+    Rectangle,
+    Border,
+    Text,
+    Image,
+    ScissorStart,
+    ScissorEnd,
+    Custom,
+}
+
+[StructLayout(LayoutKind.Sequential)]
+public readonly struct RenderCommand
+{
+    // Magically works with Span ctor because 0 offset and same size
+    // Do not add fields to this or things will get bad!
+    internal readonly Interop.RenderCommand NativeCommand;
+
+    public BoundingBox BoundingBox => NativeCommand.BoundingBox;
+    public uint Id => NativeCommand.Id;
+    public RenderCommandType CommandType => NativeCommand.CommandType;
+    
+    public unsafe ref RectangleElementConfig GetRectangle() =>
+        ref *NativeCommand.Config.RectangleElementConfig;
+
+    public unsafe ref TextElementConfig GetText() =>
+        ref *NativeCommand.Config.TextElementConfig;
+
+    public unsafe ref ImageElementConfig GetImage() =>
+        ref *NativeCommand.Config.ImageElementConfig;
+
+    public unsafe ref FloatingElementConfig GetFloating() =>
+        ref *NativeCommand.Config.FloatingElementConfig;
+
+    public unsafe ref CustomElementConfig GetCustom() =>
+        ref *NativeCommand.Config.CustomElementConfig;
+
+    public unsafe ref ScrollElementConfig GetScroll() =>
+        ref *NativeCommand.Config.ScrollElementConfig;
+
+    public unsafe ref BorderElementConfig GetBorder() =>
+        ref *NativeCommand.Config.BorderElementConfig;
+}

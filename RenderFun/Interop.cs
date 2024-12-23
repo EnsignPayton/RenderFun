@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 namespace RenderFun;
 
 /// <summary>
-/// Low level Clay interop. Redefine types and function signatures, and recreate macros as C# functions
+/// Low level Clay interop
 /// </summary>
 internal static partial class Interop
 {
@@ -218,18 +218,6 @@ internal static partial class Interop
         public bool Found;
     }
 
-    public enum RenderCommandType
-    {
-        None,
-        Rectangle,
-        Border,
-        Text,
-        Image,
-        ScissorStart,
-        ScissorEnd,
-        Custom,
-    }
-
     [StructLayout(LayoutKind.Sequential)]
     public struct RenderCommand
     {
@@ -238,30 +226,6 @@ internal static partial class Interop
         public String Text;
         public uint Id;
         public RenderCommandType CommandType;
-    }
-
-    // TODO: Not part of clay.h, remove probably
-    public enum TypedConfigType
-    {
-        Rectangle = 1,
-        Border = 2,
-        Floating = 4,
-        Scroll = 8,
-        Image = 16,
-        Text = 32,
-        Custom = 64,
-        // Interop, from Odin
-        Id = 65,
-        Layout = 66,
-    }
-
-    // TODO: Not part of clay.h, remove probably
-    [StructLayout(LayoutKind.Sequential)]
-    public struct TypedConfig
-    {
-        public TypedConfigType Type;
-        public unsafe void* Config;
-        public ElementId Id;
     }
     
     #endregion
