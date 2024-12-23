@@ -100,22 +100,8 @@ internal static class Program
         for (int i = 0; i < renderCommands.Length; i++)
         {
             var c = renderCommands[i];
-            
             Console.WriteLine($"Command {i}");
-            Console.WriteLine($"\tboundingBox [{c.BoundingBox.X},{c.BoundingBox.Y},{c.BoundingBox.Width},{c.BoundingBox.Height}]");
-            Console.WriteLine($"\tid          {c.Id}");
-            Console.WriteLine($"\tcommandType {c.CommandType}");
-
-            switch (c.CommandType)
-            {
-                case RenderCommandType.Rectangle:
-                {
-                    var config = c.GetRectangle();
-                    Console.WriteLine($"\tcolor        [{config.Color.R},{config.Color.G},{config.Color.B},{config.Color.A}]");
-                    Console.WriteLine($"\tcornerRadius [{config.CornerRadius.TopLeft},{config.CornerRadius.TopRight},{config.CornerRadius.BottomLeft},{config.CornerRadius.BottomRight}]");
-                    break;
-                }
-            }
+            Console.WriteLine(c);
         }
     }
 

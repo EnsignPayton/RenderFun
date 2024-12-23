@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 
 [assembly: DisableRuntimeMarshalling]
 
@@ -155,6 +156,9 @@ internal static partial class Interop
     {
         public int Length;
         public unsafe void* Chars;
+
+        public readonly unsafe ReadOnlySpan<byte> AsSpan() => new(Chars, Length);
+        public override string ToString() => Encoding.ASCII.GetString(AsSpan());
     }
     
     [StructLayout(LayoutKind.Sequential)]

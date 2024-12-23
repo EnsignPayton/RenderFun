@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace RenderFun;
 
@@ -225,24 +226,93 @@ public readonly struct RenderCommand
     public uint Id => NativeCommand.Id;
     public RenderCommandType CommandType => NativeCommand.CommandType;
     
-    public unsafe ref RectangleElementConfig GetRectangle() =>
+    public unsafe ref RectangleElementConfig GetRectangleConfig() =>
         ref *NativeCommand.Config.RectangleElementConfig;
 
-    public unsafe ref TextElementConfig GetText() =>
+    public unsafe ref TextElementConfig GetTextConfig() =>
         ref *NativeCommand.Config.TextElementConfig;
 
-    public unsafe ref ImageElementConfig GetImage() =>
+    public unsafe ref ImageElementConfig GetImageConfig() =>
         ref *NativeCommand.Config.ImageElementConfig;
 
-    public unsafe ref FloatingElementConfig GetFloating() =>
+    public unsafe ref FloatingElementConfig GetFloatingConfig() =>
         ref *NativeCommand.Config.FloatingElementConfig;
 
-    public unsafe ref CustomElementConfig GetCustom() =>
+    public unsafe ref CustomElementConfig GetCustomConfig() =>
         ref *NativeCommand.Config.CustomElementConfig;
 
-    public unsafe ref ScrollElementConfig GetScroll() =>
+    public unsafe ref ScrollElementConfig GetScrollConfig() =>
         ref *NativeCommand.Config.ScrollElementConfig;
 
-    public unsafe ref BorderElementConfig GetBorder() =>
+    public unsafe ref BorderElementConfig GetBorderConfig() =>
         ref *NativeCommand.Config.BorderElementConfig;
+
+    // Manual Record Stuff
+    public override string ToString()
+    {
+        var builder = new StringBuilder();
+        builder.Append("RenderCommand");
+        builder.Append(" { ");
+        if (PrintMembers(builder))
+            builder.Append(' ');
+        builder.Append('}');
+        return builder.ToString();
+    }
+
+    private bool PrintMembers(StringBuilder builder)
+    {
+        builder.Append("BoundingBox = ");
+        builder.Append(BoundingBox.ToString());
+        builder.Append(", Id = ");
+        builder.Append(Id);
+        builder.Append(", CommandType = ");
+        builder.Append(CommandType);
+        
+        if (NativeCommand.Text.Length > 0)
+        {
+            builder.Append(", Text = ");
+            builder.Append('"');
+            builder.Append(NativeCommand.Text.ToString());
+            builder.Append('"');
+        }
+        
+        switch (CommandType)
+        {
+            case RenderCommandType.Rectangle:
+                builder.Append(", Config = ");
+                builder.Append(GetRectangleConfig().ToString());
+                break;
+            case RenderCommandType.Text:
+                builder.Append(", Config = ");
+                builder.Append(GetTextConfig().ToString());
+                break;
+            case RenderCommandType.Image:
+                builder.Append(", Config = ");
+                builder.Append(GetImageConfig().ToString());
+                break;
+            // TODO: Floating?
+            /*case RenderCommandType.Floating:
+                builder.Append(", Config = ");
+                builder.Append(GetFloatingConfig().ToString());
+                break;*/
+            case RenderCommandType.Custom:
+                builder.Append(", Config = ");
+                builder.Append(GetCustomConfig().ToString());
+                break;
+            // TODO: Scroll?
+            /*case RenderCommandType.Scroll:
+                builder.Append(", Config = ");
+                builder.Append(GetScrollConfig().ToString());
+                break;*/
+            case RenderCommandType.Border:
+                builder.Append(", Config = ");
+                builder.Append(GetBorderConfig().ToString());
+                break;
+            // TODO: ScissorStart, ScissorEnd?
+        }
+        
+        return true;
+    }
+
+    // TODO: GetHashCode, Equals, IEquatable
 }
