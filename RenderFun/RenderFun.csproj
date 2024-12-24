@@ -7,9 +7,13 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  
+
   <ItemGroup>
-    <None Include="../native/clay.so">
+    <None Include="../native/clay.so" Condition="'$(OS)'=='Linux'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </None>
+    <None Include="../native/clay.dll" Condition="'$(OS)'=='Windows_NT'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </None>

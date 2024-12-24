@@ -1,7 +1,10 @@
 bin/
 obj/
-.idea
+*.o
 *.so
 *.dll
-*.o
+*.exp
+*.lib
+
+.idea
 *.user

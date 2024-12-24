@@ -1,0 +1,38 @@
+LIBRARY clay
+EXPORTS
+    Clay_MinMemorySize
+    Clay_CreateArenaWithCapacityAndMemory
+    Clay_SetPointerState
+    Clay_Initialize
+    Clay_UpdateScrollContainers
+    Clay_SetLayoutDimensions
+    Clay_BeginLayout
+    Clay_EndLayout
+    Clay_GetElementId
+    Clay_Hovered
+    Clay_OnHover
+    Clay_GetScrollContainerData
+    Clay_SetMeasureTextFunction
+    Clay_RenderCommandArray_Get
+    Clay_SetDebugModeEnabled
+
+    Clay__OpenElement
+    Clay__CloseElement
+    ; TODO: Prevent Inline
+    Clay__StoreLayoutConfig
+    Clay__ElementPostConfiguration
+    Clay__AttachId
+    Clay__AttachLayoutConfig
+    Clay__AttachElementConfig
+    ; TODO: Prevent Inline
+    Clay__StoreRectangleElementConfig
+    Clay__StoreTextElementConfig
+    Clay__StoreImageElementConfig
+    Clay__StoreFloatingElementConfig
+    Clay__StoreCustomElementConfig
+    Clay__StoreScrollElementConfig
+    Clay__StoreBorderElementConfig
+    Clay__HashString
+    Clay__Noop
+
+    Clay__OpenTextElement
