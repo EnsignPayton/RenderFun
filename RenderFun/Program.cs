@@ -16,6 +16,7 @@ internal static class Program
 
                 Layout();
 
+                // Hangs on Windows with no error, very cool
                 var renderCommands = Clay.EndLayout();
                 Log(renderCommands);
             }
