@@ -4,7 +4,7 @@ using System.Text;
 
 [assembly: DisableRuntimeMarshalling]
 
-namespace RenderFun;
+namespace RenderFun.Shared;
 
 /// <summary>
 /// Low level Clay interop

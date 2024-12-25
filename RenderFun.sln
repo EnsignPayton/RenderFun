@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderFun", "RenderFun\RenderFun.csproj", "{B78584C3-B15A-48CB-A9B1-9CFA798D50F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderFun.Shared", "RenderFun.Shared\RenderFun.Shared.csproj", "{1354A9BB-54BF-486C-8ACB-F74950B1FF6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{B78584C3-B15A-48CB-A9B1-9CFA798D50F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B78584C3-B15A-48CB-A9B1-9CFA798D50F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B78584C3-B15A-48CB-A9B1-9CFA798D50F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1354A9BB-54BF-486C-8ACB-F74950B1FF6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1354A9BB-54BF-486C-8ACB-F74950B1FF6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1354A9BB-54BF-486C-8ACB-F74950B1FF6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1354A9BB-54BF-486C-8ACB-F74950B1FF6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

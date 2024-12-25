@@ -1,13 +1,13 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace RenderFun;
+namespace RenderFun.Shared;
 
 internal sealed class ClayContext : IDisposable
 {
     private readonly IntPtr _pArena;
     private bool _disposed;
-    
+
     public ClayContext(Dimensions initialDimensions)
     {
         _pArena = InitClay(initialDimensions);
@@ -45,7 +45,7 @@ internal sealed class ClayContext : IDisposable
         };
 
         Interop.Initialize(clayMemory, dimensions);
-        
+
         return (IntPtr)clayMemory.Memory;
     }
 }

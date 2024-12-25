@@ -1,4 +1,6 @@
-﻿namespace RenderFun;
+﻿using RenderFun.Shared;
+
+namespace RenderFun;
 
 internal static class Program
 {
@@ -8,7 +10,7 @@ internal static class Program
     {
         using (Clay.Initialize(new Dimensions(800, 600)))
         {
-            SetDummyMeasureText();
+            Clay.SetDummyMeasureText();
 
             // frame
             {
@@ -21,18 +23,6 @@ internal static class Program
                 Log(renderCommands);
             }
         }
-    }
-
-    private static unsafe void SetDummyMeasureText()
-    {
-        Interop.SetMeasureTextFunction((pString, pConfig) =>
-        {
-            var len = pString->Length;
-            var size = pConfig->FontSize;
-            return new Dimensions(
-                0.75f * (len * size),
-                size);
-        });
     }
 
     private static void Layout()

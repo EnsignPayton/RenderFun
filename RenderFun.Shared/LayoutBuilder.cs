@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace RenderFun;
+namespace RenderFun.Shared;
 
 public ref struct LayoutBuilder
 {

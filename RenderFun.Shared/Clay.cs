@@ -1,13 +1,26 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace RenderFun;
+namespace RenderFun.Shared;
 
 public static class Clay
 {
     // TODO: Expose procedural initialization?
     public static IDisposable Initialize(Dimensions dimensions) =>
         new ClayContext(dimensions);
+
+    // TODO: Do a real one?
+    public static unsafe void SetDummyMeasureText()
+    {
+        Interop.SetMeasureTextFunction((pString, pConfig) =>
+        {
+            var len = pString->Length;
+            var size = pConfig->FontSize;
+            return new Dimensions(
+                0.75f * (len * size),
+                size);
+        });
+    }
 
     public static LayoutBuilder UI() => new();
 
