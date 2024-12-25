@@ -1,7 +1,5 @@
-using System.Data;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace RenderFun.Shared;
@@ -27,8 +25,6 @@ namespace RenderFun.Shared;
 // (It's frames all the way down)
 public static class ClayNet
 {
-    private const int Port = 42069;
-
     public static byte[] Serialize(RenderCommand command)
     {
         // How do I serialize this if it has pointers and stuff?
@@ -53,7 +49,7 @@ public static class ClayNet
         return ms.ToArray();
     }
 
-    public static unsafe RenderCommand DeserializeRenderCommand(ReadOnlySpan<byte> data)
+    public static unsafe RenderCommand DeserializeRenderCommand(ReadOnlySpan<byte> data, out int bytesEaten)
     {
         var nativeCommand = new Interop.RenderCommand();
 
@@ -63,6 +59,8 @@ public static class ClayNet
         data = data[4..];
         nativeCommand.CommandType = (RenderCommandType)BitConverter.ToInt32(data[..4]);
         data = data[4..];
+
+        bytesEaten = sizeof(BoundingBox) + 4 + 4;
 
         switch (nativeCommand.CommandType)
         {
@@ -74,6 +72,7 @@ public static class ClayNet
                 var configHandle = GCHandle.Alloc(config, GCHandleType.Pinned);
                 var configPtr = (RectangleElementConfig*)configHandle.AddrOfPinnedObject();
                 nativeCommand.Config = new() { RectangleElementConfig = configPtr };
+                bytesEaten += sizeof(RectangleElementConfig);
                 break;
             }
         }
@@ -106,39 +105,6 @@ public static class ClayNet
             return *(T*)(IntPtr)ptr;
         }
     }
-
-    public static void OpenServer()
-    {
-        using var listener = new TcpListener(IPAddress.Any, 42069);
-        listener.Start();
-
-        Span<byte> recvbuf = stackalloc byte[4096];
-        using (var client = listener.AcceptTcpClient())
-        {
-            var stream = client.GetStream();
-
-            while (client.Connected)
-            {
-                var received = stream.Read(recvbuf);
-                // TODO: Something
-            }
-        }
-    }
-
-    public static void OpenClient(string host)
-    {
-        using var client = new TcpClient();
-
-        client.Connect(host, 42069);
-
-        var stream = client.GetStream();
-
-        Span<byte> sendbuf = stackalloc byte[4096];
-        while (true)
-        {
-            stream.Write(sendbuf);
-        }
-    }
 }
 
 public sealed class ClayNetServer : IDisposable
@@ -147,7 +113,7 @@ public sealed class ClayNetServer : IDisposable
     private readonly CancellationTokenSource _cts = new();
     private Thread? _listenerThread;
 
-    public event Action<RenderCommand> LayoutReceived;
+    public event Action<RenderBatch>? LayoutReceived;
 
     public void Dispose()
     {
@@ -163,6 +129,9 @@ public sealed class ClayNetServer : IDisposable
 
     public void Start()
     {
+        _listener.Start();
+        _listenerThread = new Thread(() => Run(_cts.Token));
+        _listenerThread.Start();
     }
 
     private void Run(CancellationToken token)
@@ -179,10 +148,64 @@ public sealed class ClayNetServer : IDisposable
             {
                 var received = stream.Read(recvbuf);
                 var actual = recvbuf[received..];
-
-                var command = ClayNet.DeserializeRenderCommand(actual);
-                LayoutReceived?.Invoke(command);
+                var batch = RenderBatch.Deserialize(actual);
+                LayoutReceived?.Invoke(batch);
             }
         }
+    }
+}
+
+public sealed class ClayNetClient : IDisposable
+{
+    private readonly TcpClient _client = new();
+
+    public void Dispose()
+    {
+    }
+
+    public void Connect(string host)
+    {
+        _client.Connect(host, 42069);
+    }
+
+    public void SendBatch(RenderBatch value)
+    {
+        var bytes = value.Serialize();
+        _client.Client.Send(bytes);
+    }
+}
+
+public struct RenderBatch
+{
+    public RenderCommand[] Commands;
+
+    public byte[] Serialize()
+    {
+        using var ms = new MemoryStream();
+
+        ms.Write(BitConverter.GetBytes(Commands.Length));
+
+        foreach (var command in Commands)
+        {
+            ms.Write(ClayNet.Serialize(command));
+        }
+
+        return ms.ToArray();
+    }
+
+    public static RenderBatch Deserialize(ReadOnlySpan<byte> data)
+    {
+        var count = BitConverter.ToUInt32(data[..4]);
+        data = data[4..];
+
+        var result = new RenderBatch { Commands = new RenderCommand[count] };
+
+        for (int i = 0; i < count; i++)
+        {
+            result.Commands[i] = ClayNet.DeserializeRenderCommand(data, out var eaten);
+            data = data[eaten..];
+        }
+
+        return result;
     }
 }
