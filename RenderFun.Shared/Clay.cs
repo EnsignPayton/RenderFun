@@ -44,6 +44,61 @@ public static class Clay
     {
         Type = SizingType.Grow
     };
+
+    // Because Windows can't actually render them...
+    public static unsafe RenderCommand[] GetFakeCommands(Dimensions dimensions)
+    {
+        var commands = new RenderCommand[4];
+
+        var bgConfig = new RectangleElementConfig { Color = new Color(90, 90, 90, 255) };
+        var fgConfig = new RectangleElementConfig { Color = new Color(43, 41, 51, 255) };
+
+        // Leaky faucet
+        var bgConfigHandle = GCHandle.Alloc(bgConfig, GCHandleType.Pinned);
+        var fgConfigHandle = GCHandle.Alloc(fgConfig, GCHandleType.Pinned);
+
+        var bgPtr = (RectangleElementConfig*)bgConfigHandle.AddrOfPinnedObject();
+        var fgPtr = (RectangleElementConfig*)fgConfigHandle.AddrOfPinnedObject();
+
+        // Background
+        var command0 = new Interop.RenderCommand
+        {
+            BoundingBox = new(0, 0, dimensions.Width, dimensions.Height),
+            Config = new() { RectangleElementConfig = bgPtr },
+            CommandType = RenderCommandType.Rectangle
+        };
+
+        // Header
+        var command1 = new Interop.RenderCommand
+        {
+            BoundingBox = new BoundingBox(16, 16, dimensions.Width - 32, 64),
+            Config = new() { RectangleElementConfig = fgPtr },
+            CommandType = RenderCommandType.Rectangle
+        };
+
+        // Sidebar
+        var command2 = new Interop.RenderCommand
+        {
+            BoundingBox = new BoundingBox(16, 16 + 64 + 8, 256, dimensions.Height - 16 - 16 - 64 - 8),
+            Config = new() { RectangleElementConfig = fgPtr },
+            CommandType = RenderCommandType.Rectangle
+        };
+
+        // MainContent
+        var command3 = new Interop.RenderCommand
+        {
+            BoundingBox = new BoundingBox(16 + 8 + 256 + 8, 16 + 64 + 8, dimensions.Width - 16 - 16 - 8 - 256, dimensions.Height - 16 - 16 - 64 - 8),
+            Config = new() { RectangleElementConfig = fgPtr },
+            CommandType = RenderCommandType.Rectangle
+        };
+
+        commands[0] = new(command0);
+        commands[1] = new(command1);
+        commands[2] = new(command2);
+        commands[3] = new(command3);
+
+        return commands;
+    }
 }
 
 internal class StringCache
@@ -255,6 +310,11 @@ public readonly struct RenderCommand
         Interop.Array<Interop.RenderCommand> renderCommands) => new(
         renderCommands.InternalArray,
         (int)renderCommands.Length);
+
+    internal RenderCommand(Interop.RenderCommand nativeCommand)
+    {
+        NativeCommand = nativeCommand;
+    }
 
     // Magically works with Span ctor because 0 offset and same size
     // Do not add fields to this or things will get bad!
