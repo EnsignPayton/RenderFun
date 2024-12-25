@@ -45,7 +45,7 @@ public static class Clay
         Type = SizingType.Grow
     };
 
-    // Because Windows can't actually render them...
+    // Because Windows can't actually layout yet, fake it
     public static unsafe RenderCommand[] GetFakeCommands(Dimensions dimensions)
     {
         var commands = new RenderCommand[4];
