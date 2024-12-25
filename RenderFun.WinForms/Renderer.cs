@@ -6,9 +6,8 @@ public static class Renderer
 {
     public static void Render(Graphics g, ReadOnlySpan<RenderCommand> renderCommands)
     {
-        for (int i = 0; i < renderCommands.Length; i++)
+        foreach (var renderCommand in renderCommands)
         {
-            var renderCommand = renderCommands[i];
             var boundingBox = renderCommand.BoundingBox.ToGdi();
 
             switch (renderCommand.CommandType)
@@ -17,7 +16,6 @@ public static class Renderer
                 {
                     var config = renderCommand.GetRectangleConfig();
                     using var brush = new SolidBrush(config.Color.ToGdi());
-                    Console.WriteLine($"\t{boundingBox}");
                     g.FillRectangle(brush, boundingBox);
                     break;
                 }
@@ -27,18 +25,16 @@ public static class Renderer
 
     public static void Render(Graphics g, ReadOnlySpan<RenderCommand2> renderCommands)
     {
-        for (int i = 0; i < renderCommands.Length; i++)
+        foreach (var renderCommand in renderCommands)
         {
-            var renderCommand = renderCommands[i];
             var boundingBox = renderCommand.BoundingBox.ToGdi();
 
             switch (renderCommand.CommandType)
             {
                 case RenderCommandType.Rectangle:
                 {
-                    var config = renderCommand.RectangleConfig!;
+                    var config = renderCommand.RectangleConfig!.Value;
                     using var brush = new SolidBrush(config.Color.ToGdi());
-                    Console.WriteLine($"\t{boundingBox}");
                     g.FillRectangle(brush, boundingBox);
                     break;
                 }
