@@ -8,21 +8,42 @@ internal static class Program
 
     public static void Main(string[] args)
     {
+        using var server = new ClayNetServer();
+        server.LayoutReceived += batch => Log(batch.Commands);
+        using var client = new ClayNetClient();
+
+        server.Start();
+        client.Connect("localhost");
+
         using (Clay.Initialize(new Dimensions(800, 600)))
         {
             Clay.SetDummyMeasureText();
 
-            // frame
-            {
-                Clay.BeginLayout();
+            Console.WriteLine("Frame 1");
+            RunFrame(client);
+            Thread.Sleep(500);
 
-                Layout();
+            Console.WriteLine("Frame 2");
+            RunFrame(client);
+            Thread.Sleep(500);
 
-                // Hangs on Windows with no error, very cool
-                var renderCommands = Clay.EndLayout();
-                Log(renderCommands);
-            }
+            Console.WriteLine("Frame 2");
+            RunFrame(client);
+            Thread.Sleep(500);
         }
+    }
+
+    private static void RunFrame(ClayNetClient client)
+    {
+        Clay.BeginLayout();
+
+        Layout();
+
+        // Hangs on Windows with no error, very cool
+        var renderCommands = Clay.EndLayout();
+        // Log(renderCommands);
+
+        client.SendBatch(new RenderBatch { Commands = renderCommands.ToArray() });
     }
 
     private static void Layout()
