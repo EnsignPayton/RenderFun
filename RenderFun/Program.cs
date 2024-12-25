@@ -59,11 +59,7 @@ internal static class Program
                     .WithRectangle(contentBackgroundConfig)
                     .WithLayout(new LayoutConfig
                     {
-                        Sizing = new Sizing
-                        {
-                            Height = Clay.SizingFixed(60),
-                            Width = Clay.SizingGrow(),
-                        },
+                        Sizing = new Sizing { Height = Clay.SizingFixed(60), Width = Clay.SizingGrow(), },
                         Padding = new Padding { X = 16 },
                         ChildGap = 16,
                         ChildAlignment = new ChildAlignment { Y = LayoutAlignmentY.Center }
@@ -74,10 +70,7 @@ internal static class Program
                         RenderHeaderButton("Edit");
 
                         Clay.UI()
-                            .WithLayout(new LayoutConfig
-                            {
-                                Sizing = new Sizing { Width = Clay.SizingGrow() }
-                            })
+                            .WithLayout(new LayoutConfig { Sizing = new Sizing { Width = Clay.SizingGrow() } })
                             .Build();
 
                         RenderHeaderButton("Upload");
@@ -101,11 +94,7 @@ internal static class Program
                             .WithLayout(new LayoutConfig
                             {
                                 LayoutDirection = LayoutDirection.TopToBottom,
-                                Sizing = new Sizing
-                                {
-                                    Width = Clay.SizingFixed(250),
-                                    Height = Clay.SizingGrow(),
-                                }
+                                Sizing = new Sizing { Width = Clay.SizingFixed(250), Height = Clay.SizingGrow(), }
                             })
                             .WithChildren(() =>
                             {
@@ -115,7 +104,7 @@ internal static class Program
 
                         Clay.UI()
                             .WithId("MainContent")
-                            .WithRectangle(contentBackgroundConfig with { Color = new Color(1, 2, 3, 255) })
+                            .WithRectangle(contentBackgroundConfig)
                             .WithLayout(new LayoutConfig { Sizing = layoutExpand })
                             .Build();
                     })
