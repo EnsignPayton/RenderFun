@@ -310,6 +310,7 @@ public readonly struct RenderCommand
     public BoundingBox BoundingBox => NativeCommand.BoundingBox;
     public uint Id => NativeCommand.Id;
     public RenderCommandType CommandType => NativeCommand.CommandType;
+    public string Text => NativeCommand.Text.ToString();
 
     public unsafe ref RectangleElementConfig GetRectangleConfig() =>
         ref *NativeCommand.Config.RectangleElementConfig;
@@ -400,6 +401,55 @@ public readonly struct RenderCommand
     }
 
     // TODO: GetHashCode, Equals, IEquatable
+}
+
+// Forget all the memory management nonsense, let the GC do it
+public class RenderCommand2
+{
+    public BoundingBox BoundingBox { get; set; }
+    public uint Id { get; set; }
+    public RenderCommandType CommandType { get; set; }
+    public string Text { get; set; } = string.Empty;
+
+    public RectangleElementConfig? RectangleConfig { get; set; }
+    public TextElementConfig? TextConfig { get; set; }
+    public ImageElementConfig? ImageConfig { get; set; }
+    public FloatingElementConfig? FloatingConfig { get; set; }
+    public CustomElementConfig? CustomConfig { get; set; }
+    public ScrollElementConfig? ScrollConfig { get; set; }
+    public BorderElementConfig? BorderConfig { get; set; }
+
+    public static RenderCommand2 FromRenderCommand(RenderCommand command)
+    {
+        var result = new RenderCommand2
+        {
+            BoundingBox = command.BoundingBox,
+            Id = command.Id,
+            CommandType = command.CommandType,
+            Text = command.Text,
+        };
+
+        switch (command.CommandType)
+        {
+            case RenderCommandType.Rectangle:
+                result.RectangleConfig = command.GetRectangleConfig();
+                break;
+            // TODO: This
+        }
+
+        return result;
+    }
+
+    public static RenderCommand2[] FromRenderCommands(ReadOnlySpan<RenderCommand> value)
+    {
+        var asdf = new RenderCommand2[value.Length];
+        for (int i = 0; i < value.Length; i++)
+        {
+            asdf[i] = FromRenderCommand(value[i]);
+        }
+
+        return asdf;
+    }
 }
 
 #endregion

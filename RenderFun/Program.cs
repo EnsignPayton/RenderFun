@@ -12,7 +12,7 @@ internal static class Program
         using var client = new ClayNetClient();
         using var clay = Clay.Initialize(new Dimensions(800, 600));
 
-        server.LayoutReceived += batch => Log(batch.Commands);
+        server.LayoutReceived += batch => Log(batch);
 
         server.Start();
         client.Connect("localhost");
@@ -32,13 +32,13 @@ internal static class Program
         var renderCommands = Clay.EndLayout();
         // Log(renderCommands);
 
-        client.SendBatch(new RenderBatch { Commands = renderCommands.ToArray() });
+        client.SendBatch(renderCommands);
     }
 
     private static void Layout()
     {
-        var bgColor = new Color { R = 90, G = 90, B = 90, A = 255 };
-        var contentBgColor = new Color { R = 43, G = 41, B = 51, A = 255 };
+        var bgColor = new Color { R = 43, G = 41, B = 51, A = 255 };
+        var contentBgColor = new Color { R = 90, G = 90, B = 90, A = 255 };
 
         var layoutExpand = new Sizing
         {
@@ -147,6 +147,18 @@ internal static class Program
     }
 
     private static void Log(ReadOnlySpan<RenderCommand> renderCommands)
+    {
+        Console.WriteLine("Command Count: " + renderCommands.Length);
+
+        for (int i = 0; i < renderCommands.Length; i++)
+        {
+            var c = renderCommands[i];
+            Console.WriteLine($"Command {i}");
+            Console.WriteLine(c);
+        }
+    }
+
+    private static void Log(ReadOnlySpan<RenderCommand2> renderCommands)
     {
         Console.WriteLine("Command Count: " + renderCommands.Length);
 
