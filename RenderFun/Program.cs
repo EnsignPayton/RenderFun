@@ -9,28 +9,17 @@ internal static class Program
     public static void Main(string[] args)
     {
         using var server = new ClayNetServer();
-        server.LayoutReceived += batch => Log(batch.Commands);
         using var client = new ClayNetClient();
+        using var clay = Clay.Initialize(new Dimensions(800, 600));
+
+        server.LayoutReceived += batch => Log(batch.Commands);
 
         server.Start();
         client.Connect("localhost");
 
-        using (Clay.Initialize(new Dimensions(800, 600)))
-        {
-            Clay.SetDummyMeasureText();
-
-            Console.WriteLine("Frame 1");
-            RunFrame(client);
-            Thread.Sleep(500);
-
-            Console.WriteLine("Frame 2");
-            RunFrame(client);
-            Thread.Sleep(500);
-
-            Console.WriteLine("Frame 2");
-            RunFrame(client);
-            Thread.Sleep(500);
-        }
+        Console.WriteLine("Frame Start");
+        RunFrame(client);
+        Console.WriteLine("Frame End");
     }
 
     private static void RunFrame(ClayNetClient client)

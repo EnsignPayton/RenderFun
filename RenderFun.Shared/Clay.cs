@@ -9,19 +9,6 @@ public static class Clay
     public static IDisposable Initialize(Dimensions dimensions) =>
         new ClayContext(dimensions);
 
-    // TODO: Do a real one?
-    public static unsafe void SetDummyMeasureText()
-    {
-        Interop.SetMeasureTextFunction((pString, pConfig) =>
-        {
-            var len = pString->Length;
-            var size = pConfig->FontSize;
-            return new Dimensions(
-                0.75f * (len * size),
-                size);
-        });
-    }
-
     public static LayoutBuilder UI() => new();
 
     public static TextBuilder Text(ReadOnlySpan<byte> text) => new(text);

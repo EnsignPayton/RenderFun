@@ -46,6 +46,15 @@ internal sealed class ClayContext : IDisposable
 
         Interop.Initialize(clayMemory, dimensions);
 
+        Interop.SetMeasureTextFunction((pString, pConfig) =>
+        {
+            var len = pString->Length;
+            var size = pConfig->FontSize;
+            return new Dimensions(
+                0.75f * (len * size),
+                size);
+        });
+
         return (IntPtr)clayMemory.Memory;
     }
 }
