@@ -74,7 +74,7 @@ public static class Clay
         // MainContent
         var command3 = new Interop.RenderCommand
         {
-            BoundingBox = new BoundingBox(16 + 8 + 256 + 8, 16 + 64 + 8, dimensions.Width - 16 - 16 - 8 - 256, dimensions.Height - 16 - 16 - 64 - 8),
+            BoundingBox = new BoundingBox(16 + 256 + 8, 16 + 64 + 8, dimensions.Width - 16 - 16 - 8 - 256, dimensions.Height - 16 - 16 - 64 - 8),
             Config = new() { RectangleElementConfig = fgPtr },
             CommandType = RenderCommandType.Rectangle
         };
