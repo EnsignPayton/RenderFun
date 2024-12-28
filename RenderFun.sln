@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderFun.Shared", "RenderFun.Shared\RenderFun.Shared.csproj", "{1354A9BB-54BF-486C-8ACB-F74950B1FF6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderFun.Avalonia", "RenderFun.Avalonia\RenderFun.Avalonia.csproj", "{EAA3BA50-9324-4E98-B4B7-1A9634E60EA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderFun.UI", "RenderFun.UI\RenderFun.UI.csproj", "{EAA3BA50-9324-4E98-B4B7-1A9634E60EA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

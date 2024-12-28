@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace RenderFun.Avalonia;
+namespace RenderFun.UI;
 
 public partial class MainWindow : Window
 {

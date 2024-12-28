@@ -4,26 +4,32 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using RenderFun.Shared;
 
-namespace RenderFun.Avalonia;
+namespace RenderFun.UI;
 
 public class ClayCanvas : Control
 {
     private IDisposable? _clayContext;
 
+    private Dimensions ContentSize => new((float)Bounds.Width, (float)Bounds.Height);
+
     protected override void OnInitialized()
     {
-        _clayContext = Clay.Initialize(new Dimensions((float)Width, (float)Height));
+        _clayContext = Clay.Initialize(ContentSize);
         base.OnInitialized();
     }
 
     public override void Render(DrawingContext context)
     {
-        Clay.SetLayoutDimensions(new Dimensions((float)Width, (float)Height));
+        Clay.SetLayoutDimensions(ContentSize);
         Clay.BeginLayout();
 
         ExampleLayout.Layout();
 
         var renderCommands = Clay.EndLayout();
+        foreach (var c in renderCommands)
+        {
+            Console.WriteLine(c);
+        }
 
         Renderer.Render(context, RenderCommand2.FromRenderCommands(renderCommands));
         base.Render(context);

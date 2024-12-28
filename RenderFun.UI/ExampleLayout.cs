@@ -1,16 +1,17 @@
 using RenderFun.Shared;
 
-namespace RenderFun.Avalonia;
+namespace RenderFun.UI;
 
 public static class ExampleLayout
 {
     private const int FontIdBody16 = 1;
 
+    private static readonly Color BackgroundColor = new(43, 41, 51, 255);
+    private static readonly Color ContentColor = new(90, 90, 90, 255);
+    private static readonly Color ButtonColor = new(140, 140, 140, 255);
+
     public static void Layout()
     {
-        var bgColor = new Color { R = 43, G = 41, B = 51, A = 255 };
-        var contentBgColor = new Color { R = 90, G = 90, B = 90, A = 255 };
-
         var layoutExpand = new Sizing
         {
             Width = Clay.SizingGrow(),
@@ -19,13 +20,13 @@ public static class ExampleLayout
 
         var contentBackgroundConfig = new RectangleElementConfig
         {
-            Color = contentBgColor,
+            Color = ContentColor,
             CornerRadius = new CornerRadius(8)
         };
 
         Clay.UI()
             .WithId("OuterContainer")
-            .WithRectangle(new RectangleElementConfig { Color = bgColor })
+            .WithRectangle(new RectangleElementConfig { Color = BackgroundColor })
             .WithLayout(new LayoutConfig
             {
                 LayoutDirection = LayoutDirection.TopToBottom,
@@ -100,7 +101,7 @@ public static class ExampleLayout
             .WithLayout(new LayoutConfig { Padding = new Padding(16, 8) })
             .WithRectangle(new RectangleElementConfig
             {
-                Color = new Color(140, 140, 140, 255),
+                Color = ButtonColor,
                 CornerRadius = new CornerRadius(5)
             })
             .WithChildren(() =>

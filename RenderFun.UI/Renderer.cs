@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Media;
 using RenderFun.Shared;
 
-namespace RenderFun.Avalonia;
+namespace RenderFun.UI;
 
 public static class Renderer
 {
@@ -27,12 +27,12 @@ public static class Renderer
         }
     }
 
-    private static global::Avalonia.Media.Color ToAvalonia(this Shared.Color value) =>
+    private static Avalonia.Media.Color ToAvalonia(this Shared.Color value) =>
         new((byte)value.A, (byte)value.R, (byte)value.G, (byte)value.B);
 
-    private static Rect ToAvalonia(this BoundingBox value) =>
+    private static Avalonia.Rect ToAvalonia(this Shared.BoundingBox value) =>
         new(value.X, value.Y, value.Width, value.Height);
 
-    private static global::Avalonia.CornerRadius ToAvalonia(this Shared.CornerRadius value) =>
+    private static Avalonia.CornerRadius ToAvalonia(this Shared.CornerRadius value) =>
         new(value.TopLeft, value.TopRight, value.BottomRight, value.BottomLeft);
 }
