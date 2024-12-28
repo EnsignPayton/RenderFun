@@ -5,7 +5,6 @@ namespace RenderFun.Shared;
 
 public static class Clay
 {
-    // TODO: Expose procedural initialization?
     public static IDisposable Initialize(Dimensions dimensions) =>
         new ClayContext(dimensions);
 
@@ -14,9 +13,7 @@ public static class Clay
 
     public static LayoutBuilder UI() => new();
 
-    public static TextBuilder Text(ReadOnlySpan<byte> text) => new(text);
-    public static TextBuilder2 Text(ReadOnlyMemory<byte> text) => new(text);
-    public static TextBuilder2 Text(string text) => new(StringCache.Default.GetOrAdd(text));
+    public static TextBuilder Text(string text) => new(StringCache.Default.GetOrAdd(text));
 
     public static void BeginLayout() =>
         Interop.BeginLayout();
@@ -34,77 +31,6 @@ public static class Clay
     {
         Type = SizingType.Grow
     };
-
-    // Because Windows can't actually layout yet, fake it
-    public static unsafe RenderCommand[] GetFakeCommands(Dimensions dimensions)
-    {
-        var commands = new RenderCommand[4];
-
-        var bgConfig = new RectangleElementConfig { Color = new Color(90, 90, 90, 255) };
-        var fgConfig = new RectangleElementConfig { Color = new Color(43, 41, 51, 255) };
-
-        // Leaky faucet
-        var bgConfigHandle = GCHandle.Alloc(bgConfig, GCHandleType.Pinned);
-        var fgConfigHandle = GCHandle.Alloc(fgConfig, GCHandleType.Pinned);
-
-        var bgPtr = (RectangleElementConfig*)bgConfigHandle.AddrOfPinnedObject();
-        var fgPtr = (RectangleElementConfig*)fgConfigHandle.AddrOfPinnedObject();
-
-        // Background
-        var command0 = new Interop.RenderCommand
-        {
-            BoundingBox = new(0, 0, dimensions.Width, dimensions.Height),
-            Config = new() { RectangleElementConfig = bgPtr },
-            CommandType = RenderCommandType.Rectangle
-        };
-
-        // Header
-        var command1 = new Interop.RenderCommand
-        {
-            BoundingBox = new BoundingBox(16, 16, dimensions.Width - 32, 64),
-            Config = new() { RectangleElementConfig = fgPtr },
-            CommandType = RenderCommandType.Rectangle
-        };
-
-        // Sidebar
-        var command2 = new Interop.RenderCommand
-        {
-            BoundingBox = new BoundingBox(16, 16 + 64 + 8, 256, dimensions.Height - 16 - 16 - 64 - 8),
-            Config = new() { RectangleElementConfig = fgPtr },
-            CommandType = RenderCommandType.Rectangle
-        };
-
-        // MainContent
-        var command3 = new Interop.RenderCommand
-        {
-            BoundingBox = new BoundingBox(16 + 256 + 8, 16 + 64 + 8, dimensions.Width - 16 - 16 - 8 - 256, dimensions.Height - 16 - 16 - 64 - 8),
-            Config = new() { RectangleElementConfig = fgPtr },
-            CommandType = RenderCommandType.Rectangle
-        };
-
-        commands[0] = new(command0);
-        commands[1] = new(command1);
-        commands[2] = new(command2);
-        commands[3] = new(command3);
-
-        return commands;
-    }
-}
-
-internal class StringCache
-{
-    public static StringCache Default { get; } = new();
-
-    private readonly Dictionary<string, ReadOnlyMemory<byte>> _cache = [];
-
-    public ReadOnlyMemory<byte> GetOrAdd(string value)
-    {
-        if (_cache.TryGetValue(value, out var result)) return result;
-
-        ReadOnlyMemory<byte> bytes = Encoding.ASCII.GetBytes(value);
-        _cache[value] = bytes;
-        return bytes;
-    }
 }
 
 #region Interop-Compatible Public Types
@@ -315,25 +241,25 @@ public readonly struct RenderCommand
     public RenderCommandType CommandType => NativeCommand.CommandType;
     public string Text => NativeCommand.Text.ToString();
 
-    public unsafe ref RectangleElementConfig GetRectangleConfig() =>
+    public unsafe ref RectangleElementConfig RectangleConfig =>
         ref *NativeCommand.Config.RectangleElementConfig;
 
-    public unsafe ref TextElementConfig GetTextConfig() =>
+    public unsafe ref TextElementConfig TextConfig =>
         ref *NativeCommand.Config.TextElementConfig;
 
-    public unsafe ref ImageElementConfig GetImageConfig() =>
+    public unsafe ref ImageElementConfig ImageConfig =>
         ref *NativeCommand.Config.ImageElementConfig;
 
-    public unsafe ref FloatingElementConfig GetFloatingConfig() =>
+    public unsafe ref FloatingElementConfig FloatingConfig =>
         ref *NativeCommand.Config.FloatingElementConfig;
 
-    public unsafe ref CustomElementConfig GetCustomConfig() =>
+    public unsafe ref CustomElementConfig CustomConfig =>
         ref *NativeCommand.Config.CustomElementConfig;
 
-    public unsafe ref ScrollElementConfig GetScrollConfig() =>
+    public unsafe ref ScrollElementConfig ScrollConfig =>
         ref *NativeCommand.Config.ScrollElementConfig;
 
-    public unsafe ref BorderElementConfig GetBorderConfig() =>
+    public unsafe ref BorderElementConfig BorderConfig =>
         ref *NativeCommand.Config.BorderElementConfig;
 
     // Manual Record Stuff
@@ -369,33 +295,33 @@ public readonly struct RenderCommand
         {
             case RenderCommandType.Rectangle:
                 builder.Append(", Config = ");
-                builder.Append(GetRectangleConfig().ToString());
+                builder.Append(RectangleConfig.ToString());
                 break;
             case RenderCommandType.Text:
                 builder.Append(", Config = ");
-                builder.Append(GetTextConfig().ToString());
+                builder.Append(TextConfig.ToString());
                 break;
             case RenderCommandType.Image:
                 builder.Append(", Config = ");
-                builder.Append(GetImageConfig().ToString());
+                builder.Append(ImageConfig.ToString());
                 break;
             // TODO: Floating?
             /*case RenderCommandType.Floating:
                 builder.Append(", Config = ");
-                builder.Append(GetFloatingConfig().ToString());
+                builder.Append(FloatingConfig.ToString());
                 break;*/
             case RenderCommandType.Custom:
                 builder.Append(", Config = ");
-                builder.Append(GetCustomConfig().ToString());
+                builder.Append(CustomConfig.ToString());
                 break;
             // TODO: Scroll?
             /*case RenderCommandType.Scroll:
                 builder.Append(", Config = ");
-                builder.Append(GetScrollConfig().ToString());
+                builder.Append(ScrollConfig.ToString());
                 break;*/
             case RenderCommandType.Border:
                 builder.Append(", Config = ");
-                builder.Append(GetBorderConfig().ToString());
+                builder.Append(BorderConfig.ToString());
                 break;
             // TODO: ScissorStart, ScissorEnd?
         }
@@ -404,55 +330,6 @@ public readonly struct RenderCommand
     }
 
     // TODO: GetHashCode, Equals, IEquatable
-}
-
-// Forget all the memory management nonsense, let the GC do it
-public class RenderCommand2
-{
-    public BoundingBox BoundingBox { get; set; }
-    public uint Id { get; set; }
-    public RenderCommandType CommandType { get; set; }
-    public string Text { get; set; } = string.Empty;
-
-    public RectangleElementConfig? RectangleConfig { get; set; }
-    public TextElementConfig? TextConfig { get; set; }
-    public ImageElementConfig? ImageConfig { get; set; }
-    public FloatingElementConfig? FloatingConfig { get; set; }
-    public CustomElementConfig? CustomConfig { get; set; }
-    public ScrollElementConfig? ScrollConfig { get; set; }
-    public BorderElementConfig? BorderConfig { get; set; }
-
-    public static RenderCommand2 FromRenderCommand(RenderCommand command)
-    {
-        var result = new RenderCommand2
-        {
-            BoundingBox = command.BoundingBox,
-            Id = command.Id,
-            CommandType = command.CommandType,
-            Text = command.Text,
-        };
-
-        switch (command.CommandType)
-        {
-            case RenderCommandType.Rectangle:
-                result.RectangleConfig = command.GetRectangleConfig();
-                break;
-            // TODO: This
-        }
-
-        return result;
-    }
-
-    public static RenderCommand2[] FromRenderCommands(ReadOnlySpan<RenderCommand> value)
-    {
-        var asdf = new RenderCommand2[value.Length];
-        for (int i = 0; i < value.Length; i++)
-        {
-            asdf[i] = FromRenderCommand(value[i]);
-        }
-
-        return asdf;
-    }
 }
 
 #endregion

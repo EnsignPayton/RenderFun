@@ -26,12 +26,8 @@ public class ClayCanvas : Control
         ExampleLayout.Layout();
 
         var renderCommands = Clay.EndLayout();
-        foreach (var c in renderCommands)
-        {
-            Console.WriteLine(c);
-        }
 
-        Renderer.Render(context, RenderCommand2.FromRenderCommands(renderCommands));
+        Renderer.Render(context, renderCommands);
         base.Render(context);
     }
 

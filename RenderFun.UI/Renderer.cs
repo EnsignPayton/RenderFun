@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Media;
 using RenderFun.Shared;
@@ -6,7 +7,7 @@ namespace RenderFun.UI;
 
 public static class Renderer
 {
-    public static void Render(DrawingContext context, RenderCommand2[] commands)
+    public static void Render(DrawingContext context, ReadOnlySpan<RenderCommand> commands)
     {
         foreach (var renderCommand in commands)
         {
@@ -16,7 +17,7 @@ public static class Renderer
             {
                 case RenderCommandType.Rectangle:
                 {
-                    var config = renderCommand.RectangleConfig!.Value;
+                    var config = renderCommand.RectangleConfig;
                     var cr = config.CornerRadius.ToAvalonia();
                     var color = config.Color.ToAvalonia();
                     var brush = new SolidColorBrush(color);
