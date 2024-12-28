@@ -1,41 +1,12 @@
-﻿using RenderFun.Shared;
+using RenderFun.Shared;
 
-namespace RenderFun;
+namespace RenderFun.Avalonia;
 
-internal static class Program
+public static class ExampleLayout
 {
     private const int FontIdBody16 = 1;
 
-    public static void Main(string[] args)
-    {
-        using var server = new ClayNetServer();
-        using var client = new ClayNetClient();
-        using var clay = Clay.Initialize(new Dimensions(800, 600));
-
-        server.LayoutReceived += batch => Log(batch);
-
-        server.Start();
-        client.Connect("192.168.1.111");
-
-        Console.WriteLine("Frame Start");
-        RunFrame(client);
-        Console.WriteLine("Frame End");
-    }
-
-    private static void RunFrame(ClayNetClient client)
-    {
-        Clay.BeginLayout();
-
-        Layout();
-
-        // Hangs on Windows with no error, very cool
-        var renderCommands = Clay.EndLayout();
-        // Log(renderCommands);
-
-        client.SendBatch(renderCommands);
-    }
-
-    private static void Layout()
+    public static void Layout()
     {
         var bgColor = new Color { R = 43, G = 41, B = 51, A = 255 };
         var contentBgColor = new Color { R = 90, G = 90, B = 90, A = 255 };
@@ -144,29 +115,5 @@ internal static class Program
                     .Build();
             })
             .Build();
-    }
-
-    private static void Log(ReadOnlySpan<RenderCommand> renderCommands)
-    {
-        Console.WriteLine("Command Count: " + renderCommands.Length);
-
-        for (int i = 0; i < renderCommands.Length; i++)
-        {
-            var c = renderCommands[i];
-            Console.WriteLine($"Command {i}");
-            Console.WriteLine(c);
-        }
-    }
-
-    private static void Log(ReadOnlySpan<RenderCommand2> renderCommands)
-    {
-        Console.WriteLine("Command Count: " + renderCommands.Length);
-
-        for (int i = 0; i < renderCommands.Length; i++)
-        {
-            var c = renderCommands[i];
-            Console.WriteLine($"Command {i}");
-            Console.WriteLine(c);
-        }
     }
 }

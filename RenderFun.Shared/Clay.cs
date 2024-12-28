@@ -9,6 +9,9 @@ public static class Clay
     public static IDisposable Initialize(Dimensions dimensions) =>
         new ClayContext(dimensions);
 
+    public static void SetLayoutDimensions(Dimensions dimensions) =>
+        Interop.SetLayoutDimensions(dimensions);
+
     public static LayoutBuilder UI() => new();
 
     public static TextBuilder Text(ReadOnlySpan<byte> text) => new(text);
