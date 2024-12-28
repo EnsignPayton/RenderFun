@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Avalonia;
 using Avalonia.Media;
 using RenderFun.Shared;
@@ -22,6 +23,16 @@ public static class Renderer
                     var color = config.Color.ToAvalonia();
                     var brush = new SolidColorBrush(color);
                     context.DrawRectangle(brush, null, new RoundedRect(bb, cr));
+                    break;
+                }
+                case RenderCommandType.Text:
+                {
+                    var config = renderCommand.TextConfig;
+                    var color = config.TextColor.ToAvalonia();
+                    var brush = new SolidColorBrush(color);
+                    var formattedText = new FormattedText(renderCommand.Text, CultureInfo.CurrentCulture,
+                        FlowDirection.LeftToRight, Typeface.Default, config.FontSize, brush);
+                    context.DrawText(formattedText, bb.Position);
                     break;
                 }
             }

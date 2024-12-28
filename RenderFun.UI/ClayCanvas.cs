@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -15,6 +16,13 @@ public class ClayCanvas : Control
     protected override void OnInitialized()
     {
         _clayContext = Clay.Initialize(ContentSize);
+        Clay.SetMeasureText((text, config) =>
+        {
+            var formattedText = new FormattedText(text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
+                Typeface.Default, config.FontSize, null);
+
+            return new Dimensions((float)formattedText.Width, (float)formattedText.Height);
+        });
         base.OnInitialized();
     }
 
@@ -23,7 +31,8 @@ public class ClayCanvas : Control
         Clay.SetLayoutDimensions(ContentSize);
         Clay.BeginLayout();
 
-        ExampleLayout.Layout();
+        //ExampleLayout.Layout();
+        VideoDemo.Compute();
 
         var renderCommands = Clay.EndLayout();
 

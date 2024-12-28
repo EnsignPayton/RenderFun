@@ -11,6 +11,16 @@ public static class Clay
     public static void SetLayoutDimensions(Dimensions dimensions) =>
         Interop.SetLayoutDimensions(dimensions);
 
+    public static unsafe void SetMeasureText(Func<string, TextElementConfig, Dimensions> measure)
+    {
+        Interop.SetMeasureTextFunction((pString, pConfig) =>
+        {
+            var netString = pString->ToString();
+            ref var config = ref *pConfig;
+            return measure(netString, config);
+        });
+    }
+
     public static LayoutBuilder UI() => new();
 
     public static TextBuilder Text(string text) => new(StringCache.Default.GetOrAdd(text));
