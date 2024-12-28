@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderFun", "RenderFun\RenderFun.csproj", "{B78584C3-B15A-48CB-A9B1-9CFA798D50F9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderFun.Shared", "RenderFun.Shared\RenderFun.Shared.csproj", "{1354A9BB-54BF-486C-8ACB-F74950B1FF6A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderFun.WinForms", "RenderFun.WinForms\RenderFun.WinForms.csproj", "{7C14630D-BA49-40B5-B76C-4451234E5F69}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderFun.Avalonia", "RenderFun.Avalonia\RenderFun.Avalonia.csproj", "{EAA3BA50-9324-4E98-B4B7-1A9634E60EA3}"
 EndProject
@@ -20,18 +16,10 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B78584C3-B15A-48CB-A9B1-9CFA798D50F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B78584C3-B15A-48CB-A9B1-9CFA798D50F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B78584C3-B15A-48CB-A9B1-9CFA798D50F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B78584C3-B15A-48CB-A9B1-9CFA798D50F9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1354A9BB-54BF-486C-8ACB-F74950B1FF6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1354A9BB-54BF-486C-8ACB-F74950B1FF6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1354A9BB-54BF-486C-8ACB-F74950B1FF6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1354A9BB-54BF-486C-8ACB-F74950B1FF6A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C14630D-BA49-40B5-B76C-4451234E5F69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C14630D-BA49-40B5-B76C-4451234E5F69}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C14630D-BA49-40B5-B76C-4451234E5F69}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C14630D-BA49-40B5-B76C-4451234E5F69}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EAA3BA50-9324-4E98-B4B7-1A9634E60EA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EAA3BA50-9324-4E98-B4B7-1A9634E60EA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAA3BA50-9324-4E98-B4B7-1A9634E60EA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
