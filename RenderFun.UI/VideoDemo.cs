@@ -10,16 +10,15 @@ public static class VideoDemo
     private static void RenderHeaderButton(string text)
     {
         Clay.UI()
-            .WithLayout(new() { Padding = new(16, 8)})
-            .WithRectangle(new()
+            .Layout(new() { Padding = new(16, 8)})
+            .Rectangle(new()
             {
                 Color = new(140, 140, 140, 255),
                 CornerRadius = new(5)
             })
-            .WithChildren(() =>
+            .Children(() =>
             {
-                Clay.Text(text)
-                    .WithConfig(new()
+                Clay.Text(text, new()
                     {
                         FontId = FontIdBody16,
                         FontSize = 16,
@@ -33,11 +32,10 @@ public static class VideoDemo
     private static void RenderDropdownMenuItem(string text)
     {
         Clay.UI()
-            .WithLayout(new() { Padding = new(16, 16) })
-            .WithChildren(() =>
+            .Layout(new() { Padding = new(16, 16) })
+            .Children(() =>
             {
-                Clay.Text(text)
-                    .WithConfig(new()
+                Clay.Text(text, new()
                     {
                         FontId = FontIdBody16,
                         FontSize = 16,
@@ -125,21 +123,21 @@ public static class VideoDemo
         };
 
         Clay.UI()
-            .WithId("OuterContainer")
-            .WithRectangle(new() { Color = new(43, 41, 51, 255) })
-            .WithLayout(new()
+            .Id("OuterContainer")
+            .Rectangle(new() { Color = new(43, 41, 51, 255) })
+            .Layout(new()
             {
                 LayoutDirection = LayoutDirection.TopToBottom,
                 Sizing = layoutExpand,
                 Padding = new(16, 16),
                 ChildGap = 16
             })
-            .WithChildren(() =>
+            .Children(() =>
             {
                 Clay.UI()
-                    .WithId("HeaderBar")
-                    .WithRectangle(contentBackgroundConfig)
-                    .WithLayout(new()
+                    .Id("HeaderBar")
+                    .Rectangle(contentBackgroundConfig)
+                    .Layout(new()
                     {
                         Sizing = new()
                         {
@@ -153,20 +151,20 @@ public static class VideoDemo
                             Y = LayoutAlignmentY.Center
                         }
                     })
-                    .WithChildren(() =>
+                    .Children(() =>
                     {
                         Clay.UI()
-                            .WithId("FileButton")
-                            .WithLayout(new() { Padding = new(16, 8) })
-                            .WithRectangle(new()
+                            .Id("FileButton")
+                            .Layout(new() { Padding = new(16, 8) })
+                            .Rectangle(new()
                             {
                                 Color = new(140, 140, 140, 255),
                                 CornerRadius = new(5)
                             })
-                            .WithChildren(() =>
+                            .Children(() =>
                             {
                                 Clay.Text("File")
-                                    .WithConfig(new()
+                                    .Config(new()
                                     {
                                         FontId = FontIdBody16,
                                         FontSize = 16,
@@ -175,13 +173,46 @@ public static class VideoDemo
                                     .Build();
 
                                 // TODO: PointerOver / GetElementId
-                                bool fileMenuVisible = false;
+                                bool fileMenuVisible = true;
                                 if (fileMenuVisible)
                                 {
                                     Clay.UI()
-                                        .WithId("FileMenu")
-                                        // TODO: This
-                                        //.WithFloating()
+                                        .Id("FileMenu")
+                                        .Floating(new()
+                                        {
+                                            Attachment = new()
+                                            {
+                                                Parent = FloatingAttachPointType.LeftBottom
+                                            }
+                                        })
+                                        .Layout(new()
+                                        {
+                                            Padding = new(0, 8)
+                                        })
+                                        .Children(() =>
+                                        {
+                                            Clay.UI()
+                                                .Layout(new()
+                                                {
+                                                    LayoutDirection = LayoutDirection.TopToBottom,
+                                                    Sizing = new()
+                                                    {
+                                                        Width = Clay.SizingFixed(200)
+                                                    }
+                                                })
+                                                .Rectangle(new()
+                                                {
+                                                    Color = new(40, 40, 40, 255),
+                                                    CornerRadius = new(8)
+                                                })
+                                                .Children(() =>
+                                                {
+                                                    RenderDropdownMenuItem("New");
+                                                    RenderDropdownMenuItem("Open");
+                                                    RenderDropdownMenuItem("Close");
+                                                })
+                                                .Build();
+                                        })
                                         .Build();
                                 }
                             })
@@ -190,7 +221,7 @@ public static class VideoDemo
                         RenderHeaderButton("Edit");
 
                         Clay.UI()
-                            .WithLayout(new() { Sizing = new() { Width = Clay.SizingGrow() } })
+                            .Layout(new() { Sizing = new() { Width = Clay.SizingGrow() } })
                             .Build();
 
                         RenderHeaderButton("Upload");
@@ -200,14 +231,14 @@ public static class VideoDemo
                     .Build();
 
                 Clay.UI()
-                    .WithId("LowerContent")
-                    .WithLayout(new() { Sizing = layoutExpand, ChildGap = 16 })
-                    .WithChildren(() =>
+                    .Id("LowerContent")
+                    .Layout(new() { Sizing = layoutExpand, ChildGap = 16 })
+                    .Children(() =>
                     {
                         Clay.UI()
-                            .WithId("Sidebar")
-                            .WithRectangle(contentBackgroundConfig)
-                            .WithLayout(new()
+                            .Id("Sidebar")
+                            .Rectangle(contentBackgroundConfig)
+                            .Layout(new()
                             {
                                 LayoutDirection = LayoutDirection.TopToBottom,
                                 Padding = new(16, 16),
@@ -218,7 +249,7 @@ public static class VideoDemo
                                     Height = Clay.SizingGrow()
                                 }
                             })
-                            .WithChildren(() =>
+                            .Children(() =>
                             {
                                 for (int i = 0; i < Documents.Length; i++)
                                 {
@@ -233,16 +264,16 @@ public static class VideoDemo
                                     if (i == SelectedDocumentIndex)
                                     {
                                         Clay.UI()
-                                            .WithLayout(sidebarButtonLayout)
-                                            .WithRectangle(new()
+                                            .Layout(sidebarButtonLayout)
+                                            .Rectangle(new()
                                             {
                                                 Color = new(120, 120, 120, 255),
                                                 CornerRadius = new(8)
                                             })
-                                            .WithChildren(() =>
+                                            .Children(() =>
                                             {
                                                 Clay.Text(document.Title)
-                                                    .WithConfig(new()
+                                                    .Config(new()
                                                     {
                                                         FontId = FontIdBody16,
                                                         FontSize = 20,
@@ -255,12 +286,12 @@ public static class VideoDemo
                                     else
                                     {
                                         Clay.UI()
-                                            .WithLayout(sidebarButtonLayout)
+                                            .Layout(sidebarButtonLayout)
                                             // TODO: OnHover
-                                            .WithChildren(() =>
+                                            .Children(() =>
                                             {
                                                 Clay.Text(document.Title)
-                                                    .WithConfig(new()
+                                                    .Config(new()
                                                     {
                                                         FontId = FontIdBody16,
                                                         FontSize = 20,
@@ -275,22 +306,22 @@ public static class VideoDemo
                             .Build();
 
                         Clay.UI()
-                            .WithId("MainContent")
-                            .WithRectangle(contentBackgroundConfig)
+                            .Id("MainContent")
+                            .Rectangle(contentBackgroundConfig)
                             // TODO: Scroll
                             //.WithScroll()
-                            .WithLayout(new()
+                            .Layout(new()
                             {
                                 LayoutDirection = LayoutDirection.TopToBottom,
                                 ChildGap = 16,
                                 Padding = new(16, 16),
                                 Sizing = layoutExpand
                             })
-                            .WithChildren(() =>
+                            .Children(() =>
                             {
                                 var selectedDocument = Documents[SelectedDocumentIndex];
                                 Clay.Text(selectedDocument.Title)
-                                    .WithConfig(new()
+                                    .Config(new()
                                     {
                                         FontId = FontIdBody16,
                                         FontSize = 24,
@@ -299,7 +330,7 @@ public static class VideoDemo
                                     .Build();
 
                                 Clay.Text(selectedDocument.Contents)
-                                    .WithConfig(new()
+                                    .Config(new()
                                     {
                                         FontId = FontIdBody16,
                                         FontSize = 24,

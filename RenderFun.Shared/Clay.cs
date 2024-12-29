@@ -25,6 +25,9 @@ public static class Clay
 
     public static TextBuilder Text(string text) => new(StringCache.Default.GetOrAdd(text));
 
+    public static TextBuilder Text(string text, TextElementConfig config) =>
+        Text(text).Config(config);
+
     public static void BeginLayout() =>
         Interop.BeginLayout();
 

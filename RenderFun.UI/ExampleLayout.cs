@@ -25,34 +25,34 @@ public static class ExampleLayout
         };
 
         Clay.UI()
-            .WithId("OuterContainer")
-            .WithRectangle(new RectangleElementConfig { Color = BackgroundColor })
-            .WithLayout(new LayoutConfig
+            .Id("OuterContainer")
+            .Rectangle(new RectangleElementConfig { Color = BackgroundColor })
+            .Layout(new LayoutConfig
             {
                 LayoutDirection = LayoutDirection.TopToBottom,
                 Sizing = layoutExpand,
                 Padding = new Padding(16),
                 ChildGap = 8,
             })
-            .WithChildren(() =>
+            .Children(() =>
             {
                 Clay.UI()
-                    .WithId("HeaderBar")
-                    .WithRectangle(contentBackgroundConfig)
-                    .WithLayout(new LayoutConfig
+                    .Id("HeaderBar")
+                    .Rectangle(contentBackgroundConfig)
+                    .Layout(new LayoutConfig
                     {
                         Sizing = new Sizing { Height = Clay.SizingFixed(60), Width = Clay.SizingGrow(), },
                         Padding = new Padding { X = 16 },
                         ChildGap = 16,
                         ChildAlignment = new ChildAlignment { Y = LayoutAlignmentY.Center }
                     })
-                    .WithChildren(() =>
+                    .Children(() =>
                     {
                         RenderHeaderButton("File");
                         RenderHeaderButton("Edit");
 
                         Clay.UI()
-                            .WithLayout(new LayoutConfig { Sizing = new Sizing { Width = Clay.SizingGrow() } })
+                            .Layout(new LayoutConfig { Sizing = new Sizing { Width = Clay.SizingGrow() } })
                             .Build();
 
                         RenderHeaderButton("Upload");
@@ -62,32 +62,32 @@ public static class ExampleLayout
                     .Build();
 
                 Clay.UI()
-                    .WithId("LowerContent")
-                    .WithLayout(new LayoutConfig
+                    .Id("LowerContent")
+                    .Layout(new LayoutConfig
                     {
                         Sizing = layoutExpand,
                         ChildGap = 8,
                     })
-                    .WithChildren(() =>
+                    .Children(() =>
                     {
                         Clay.UI()
-                            .WithId("Sidebar")
-                            .WithRectangle(contentBackgroundConfig)
-                            .WithLayout(new LayoutConfig
+                            .Id("Sidebar")
+                            .Rectangle(contentBackgroundConfig)
+                            .Layout(new LayoutConfig
                             {
                                 LayoutDirection = LayoutDirection.TopToBottom,
                                 Sizing = new Sizing { Width = Clay.SizingFixed(250), Height = Clay.SizingGrow(), }
                             })
-                            .WithChildren(() =>
+                            .Children(() =>
                             {
                                 // TODO: Stuff
                             })
                             .Build();
 
                         Clay.UI()
-                            .WithId("MainContent")
-                            .WithRectangle(contentBackgroundConfig)
-                            .WithLayout(new LayoutConfig { Sizing = layoutExpand })
+                            .Id("MainContent")
+                            .Rectangle(contentBackgroundConfig)
+                            .Layout(new LayoutConfig { Sizing = layoutExpand })
                             .Build();
                     })
                     .Build();
@@ -98,16 +98,16 @@ public static class ExampleLayout
     private static void RenderHeaderButton(string text)
     {
         Clay.UI()
-            .WithLayout(new LayoutConfig { Padding = new Padding(16, 8) })
-            .WithRectangle(new RectangleElementConfig
+            .Layout(new LayoutConfig { Padding = new Padding(16, 8) })
+            .Rectangle(new RectangleElementConfig
             {
                 Color = ButtonColor,
                 CornerRadius = new CornerRadius(5)
             })
-            .WithChildren(() =>
+            .Children(() =>
             {
                 Clay.Text(text)
-                    .WithConfig(new TextElementConfig
+                    .Config(new TextElementConfig
                     {
                         FontId = FontIdBody16,
                         FontSize = 16,

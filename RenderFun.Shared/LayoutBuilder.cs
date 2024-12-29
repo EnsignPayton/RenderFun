@@ -6,18 +6,11 @@ public ref struct LayoutBuilder
 {
     private ref LayoutConfig _layoutConfig;
     private ref RectangleElementConfig _rectConfig;
+    private ref FloatingElementConfig _floatingConfig;
 
     private Action? _childBuilder;
 
-    public LayoutBuilder WithId(ReadOnlySpan<byte> value)
-    {
-        var clayString = Interop.String.FromSpan(value);
-        var elementId = Interop._HashString(clayString, 0, 0);
-        Interop._AttachId(elementId);
-        return this;
-    }
-
-    public LayoutBuilder WithId(string value)
+    public LayoutBuilder Id(string value)
     {
         var memory = StringCache.Default.GetOrAdd(value);
         var clayString = Interop.String.FromMemory(memory);
@@ -26,19 +19,25 @@ public ref struct LayoutBuilder
         return this;
     }
 
-    public unsafe LayoutBuilder WithLayout(LayoutConfig config)
+    public unsafe LayoutBuilder Layout(LayoutConfig config)
     {
         _layoutConfig = ref *Interop._StoreLayoutConfig(config);
         return this;
     }
 
-    public unsafe LayoutBuilder WithRectangle(RectangleElementConfig config)
+    public unsafe LayoutBuilder Rectangle(RectangleElementConfig config)
     {
         _rectConfig = ref *Interop._StoreRectangleElementConfig(config);
         return this;
     }
 
-    public LayoutBuilder WithChildren(Action configure)
+    public unsafe LayoutBuilder Floating(FloatingElementConfig config)
+    {
+        _floatingConfig = ref *Interop._StoreFloatingElementConfig(config);
+        return this;
+    }
+
+    public LayoutBuilder Children(Action configure)
     {
         _childBuilder = configure;
         return this;
@@ -60,5 +59,8 @@ public ref struct LayoutBuilder
 
         if (!Unsafe.IsNullRef(ref _rectConfig))
             Interop._AttachElementConfig(Unsafe.AsPointer(ref _rectConfig), Interop._ElementConfigType.Rectangle);
+
+        if (!Unsafe.IsNullRef(ref _floatingConfig))
+            Interop._AttachElementConfig(Unsafe.AsPointer(ref _floatingConfig), Interop._ElementConfigType.FloatingContainer);
     }
 }

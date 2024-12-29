@@ -7,7 +7,7 @@ public ref struct TextBuilder(ReadOnlyMemory<byte> text)
     private readonly ReadOnlyMemory<byte> _text = text;
     private ref TextElementConfig _config;
 
-    public unsafe TextBuilder WithConfig(TextElementConfig config)
+    public unsafe TextBuilder Config(TextElementConfig config)
     {
         _config = ref *Interop._StoreTextElementConfig(config);
         return this;
